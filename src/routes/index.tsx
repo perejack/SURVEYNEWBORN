@@ -2024,8 +2024,11 @@ function Index() {
                 </div>
                 <div className="page-title">
                   <h1>
-                    Explore surveys<span className="heading-flower">✳</span>
+                    Explore paid survey<span className="heading-flower">✳</span>
                   </h1>
+                  <p className="font-semibold text-emerald-800 mb-1">
+                    Get paid by top companies: KCB, Safaricom, Jumia
+                  </p>
                   <p>Each survey has at least 5 multiple-choice questions. Select answers to earn KSh 150 each!</p>
                 </div>
 
