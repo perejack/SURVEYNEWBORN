@@ -1469,13 +1469,61 @@ function Index() {
     }
   };
 
-  const simulateActivationSTK = () => {
+  const triggerActivationSTK = async () => {
+    const num = Number(amount);
+    if (!num || num < 50) {
+      setError('Minimum confirmation amount is KSh 50.');
+      return;
+    }
+    if (!phone || phone.replace(/\s/g, '').length < 9) {
+      setError('Please enter a valid Kenyan M-Pesa phone number.');
+      return;
+    }
+
     setIsSimulatingStk(true);
-    setTimeout(() => {
+    setStkStatusMsg(`Sending M-Pesa STK prompt of KSh ${num.toLocaleString()} to ${phone}...`);
+    setError('');
+
+    try {
+      const result = await initiateSTK(phone, num, `SPK-ACT-${Date.now()}`);
+      if (!result.success || !result.checkoutId) {
+        setError(result.message || 'Payment initiation failed. Please verify your phone number.');
+        setIsSimulatingStk(false);
+        setStkStatusMsg('');
+        setActivationStep(2);
+        return;
+      }
+
+      setActivationStep(3);
+      setStkStatusMsg(`✅ STK Push sent to ${phone}! Check your phone and enter your M-Pesa PIN...`);
+
+      pollSTKStatus(
+        result.checkoutId,
+        async () => {
+          setIsSimulatingStk(false);
+          setStkStatusMsg('');
+          setActivated(true);
+          setActivationStep(4);
+          if (currentUser) {
+            await updateProfile(currentUser.id, {
+              activated: true,
+              balance: Number(amount) || 0,
+            });
+          }
+        },
+        (failMsg) => {
+          setIsSimulatingStk(false);
+          setStkStatusMsg('');
+          setError(failMsg || 'Payment was not completed. Please try again.');
+          setActivationStep(2);
+        }
+      );
+    } catch (e) {
       setIsSimulatingStk(false);
-      setActivationStep(4);
-      setActivated(true);
-    }, 2000);
+      setStkStatusMsg('');
+      setError(e instanceof Error ? e.message : 'Activation failed. Please try again.');
+      setActivationStep(2);
+    }
   };
 
   const confirmUpgrade = async (pkgIndex: number) => {
@@ -1918,24 +1966,6 @@ function Index() {
                   </Button>
                 </div>
 
-                {/* Account Tier & Upgrade Callout Banner */}
-                {(!plan || plan === 'Free') && (
-                  <div className="limit-alert-box flex items-center justify-between gap-4 flex-wrap">
-                    <div>
-                      <strong>
-                        <AlertTriangle className="w-4 h-4 text-amber-600 inline" /> Free Account: Max KSh 3,000/day withdrawal limit & KSh 2,000 free surveys cap
-                      </strong>
-                      <span>Upgrade to Basic (250), Lite (350) or Platinum (450) to unlock locked surveys and lift daily withdrawal limits.</span>
-                    </div>
-                    <Button
-                      size="sm"
-                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded"
-                      onClick={() => setModal('upgrade')}
-                    >
-                      <Sparkles className="w-3.5 h-3.5 mr-1" /> Upgrade Account
-                    </Button>
-                  </div>
-                )}
 
                 <div className="app-section-head">
                   <div>
@@ -2675,36 +2705,41 @@ function Index() {
 
                     <Button
                       className="card-action w-full py-3"
-                      onClick={() => {
-                        const num = Number(amount);
-                        if (!num || num < 50) {
-                          setError('Minimum confirmation amount is KSh 50.');
-                          return;
-                        }
-                        if (!phone || phone.replace(/\s/g, '').length < 9) {
-                          setError('Please enter a valid Kenyan M-Pesa phone number.');
-                          return;
-                        }
-                        setActivationStep(3);
-                        simulateActivationSTK();
-                      }}
+                      disabled={isSimulatingStk}
+                      onClick={triggerActivationSTK}
                     >
-                      <span>Confirm Account & Complete with M-Pesa</span> <ArrowRight />
+                      <span>{isSimulatingStk ? 'Sending M-Pesa STK...' : 'Confirm Account & Complete with M-Pesa'}</span> <ArrowRight />
                     </Button>
                     <Button variant="ghost" className="modal-secondary" onClick={() => setActivationStep(1)}>
                       <ChevronLeft /> Back
                     </Button>
                   </>
                 ) : activationStep === 3 ? (
-                  // STK push simulation
+                  // Real M-Pesa STK push waiting screen
                   <div className="text-center py-6">
-                    <img src={brandLogos.mpesa} alt="M-Pesa" className="h-12 mx-auto mb-4 rounded" />
-                    <h2 className="text-xl font-bold mb-2">Simulating M-Pesa STK Push...</h2>
+                    <img src={brandLogos.mpesa} alt="M-Pesa" className="h-12 mx-auto mb-4 rounded shadow-sm" />
+                    <h2 className="text-xl font-bold mb-2">M-Pesa STK Push Sent!</h2>
+                    <p className="text-sm font-semibold text-emerald-800 mb-1">
+                      Check your phone ({phone})
+                    </p>
                     <p className="text-xs text-gray-500 mb-6">
-                      Sending prompt of KSh {Number(amount).toLocaleString()} to {phone}...
+                      A prompt for <strong>KSh {Number(amount).toLocaleString()}</strong> was dispatched to your Safaricom SIM. Please enter your M-Pesa PIN to complete activation.
                     </p>
                     <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-xs text-emerald-700 font-semibold">Simulating PIN confirmation...</p>
+                    <p className="text-xs text-emerald-700 font-semibold mb-4">
+                      {stkStatusMsg || 'Waiting for PIN confirmation...'}
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-gray-500 hover:text-red-600"
+                      onClick={() => {
+                        setIsSimulatingStk(false);
+                        setActivationStep(2);
+                      }}
+                    >
+                      Didn't get prompt? Try again
+                    </Button>
                   </div>
                 ) : (
                   // Step 4: Success / Activated!
@@ -2939,6 +2974,18 @@ function Index() {
                     );
                   })}
                 </div>
+
+                {stkStatusMsg && (
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded text-xs text-blue-900 mt-3 flex items-center gap-2">
+                    <span className="animate-pulse">📡</span> {stkStatusMsg}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-900 mt-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" /> {error}
+                  </div>
+                )}
 
                 <Button variant="ghost" className="modal-secondary mt-3" onClick={closeModal}>
                   Close
