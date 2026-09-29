@@ -1232,6 +1232,21 @@ function Index() {
       }
     });
 
+    // Support accessing signup / login via route query parameter (e.g. /?auth=signup or /?signup=true)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const authParam = params.get('auth') || params.get('mode');
+      if (authParam === 'signup' || params.has('signup')) {
+        setAuthMode('signup');
+        setAuthError('');
+        setModal('auth');
+      } else if (authParam === 'login' || params.has('login')) {
+        setAuthMode('login');
+        setAuthError('');
+        setModal('auth');
+      }
+    }
+
     return () => {
       mounted = false;
       subscription.unsubscribe();
