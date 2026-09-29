@@ -1782,7 +1782,7 @@ function Index() {
               </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
-                  Join the Community <ArrowUpRight />
+                  Get Started Free <ArrowUpRight />
                 </Button>
                 <Button
                   className="hero-text"
@@ -1935,7 +1935,7 @@ function Index() {
                 </h2>
                 <p>Participating in consumer opinion research is straightforward and takes just a few minutes.</p>
                 <Button className="dark-button" onClick={start}>
-                  Join the Community <ArrowUpRight />
+                  Explore SurveyPay <ArrowUpRight />
                 </Button>
               </div>
               <div className="how-steps">
@@ -1970,7 +1970,7 @@ function Index() {
                 <p>Join thousands of Kenyans sharing insights on everyday products and services.</p>
               </div>
               <Button className="hero-primary" onClick={start}>
-                Join SurveyPay Kenya <ArrowUpRight />
+                Join Free & Start Surveys <ArrowUpRight />
               </Button>
             </div>
           </section>
