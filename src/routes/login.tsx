@@ -16,9 +16,9 @@ export const Route = createFileRoute('/login')({
   head: () => ({
     meta: [
       { title: 'Log In — Survey Pay Kenya' },
-      { name: 'description', content: 'Log in to your Survey Pay Kenya panel account.' },
+      { name: 'description', content: 'Log in to your Survey Pay Kenya consumer panel account.' },
       { property: 'og:title', content: 'Log In — Survey Pay Kenya' },
-      { property: 'og:description', content: 'Log in to access your surveys, wallet, and M-Pesa payouts.' },
+      { property: 'og:description', content: 'Log in to access your consumer research panel and active studies.' },
     ],
   }),
   component: LoginPage,
@@ -125,7 +125,7 @@ function LoginPage() {
             </div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Log in to your account</h1>
             <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-              Access your active surveys, account tier, and M-Pesa withdrawal balance.
+              Access your saved consumer studies, participation history, and member dashboard.
             </p>
           </div>
 

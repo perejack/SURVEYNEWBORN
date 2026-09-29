@@ -18,9 +18,9 @@ export const Route = createFileRoute('/signup')({
   head: () => ({
     meta: [
       { title: 'Create Account — Survey Pay Kenya' },
-      { name: 'description', content: 'Sign up for Survey Pay Kenya to participate in consumer surveys and earn M-Pesa rewards.' },
+      { name: 'description', content: 'Create your panel account to participate in consumer surveys and community opinion studies across Kenya.' },
       { property: 'og:title', content: 'Create Account — Survey Pay Kenya' },
-      { property: 'og:description', content: 'Sign up to start sharing your opinions and earning verified rewards via M-Pesa.' },
+      { property: 'og:description', content: 'Join Kenyans sharing feedback on local products, services, and everyday consumer experiences.' },
     ],
   }),
   component: SignUpPage,
@@ -142,7 +142,7 @@ function SignUpPage() {
             </div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create your account</h1>
             <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-              Join Kenyans participating in brand surveys. Earn rewards redeemable to your M-Pesa.
+              Join Kenyans sharing perspectives on everyday products, local services, and consumer experiences.
             </p>
           </div>
 
@@ -178,7 +178,7 @@ function SignUpPage() {
 
             <div>
               <label className="block text-[11px] font-bold tracking-wider text-slate-700 uppercase mb-1.5" htmlFor="phone">
-                M-Pesa Phone Number
+                Phone Number
               </label>
               <div className="relative">
                 <Smartphone className="w-4 h-4 text-emerald-600 absolute left-3 top-3.5" />
@@ -197,7 +197,7 @@ function SignUpPage() {
                 />
               </div>
               <span className="block text-[10px] text-slate-400 mt-1">
-                Used for instant STK payouts and account verification.
+                Used for phone verification and secure member access.
               </span>
             </div>
 
@@ -226,15 +226,15 @@ function SignUpPage() {
             <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-lg space-y-1.5">
               <div className="flex items-center gap-2 text-[11px] text-emerald-900 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span>Earn up to KSh 150 per completed survey</span>
+                <span>Access active community polls and consumer questionnaires</span>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-emerald-900 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span>Instant withdrawals to linked M-Pesa line</span>
+                <span>Fast 3-5 minute multiple-choice topic studies</span>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-emerald-900 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                <span>Compliant with Kenya Data Protection Act 2019</span>
+                <span>Strictly compliant with Kenya Data Protection Act 2019</span>
               </div>
             </div>
 
@@ -250,7 +250,7 @@ function SignUpPage() {
                 </>
               ) : (
                 <>
-                  <span>Create Account & Start Earning</span>
+                  <span>Create Panel Account</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

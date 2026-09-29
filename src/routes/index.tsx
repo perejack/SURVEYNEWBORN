@@ -33,6 +33,8 @@ import {
   TrendingUp,
   LogOut,
   FileText,
+  Users,
+  BarChart3,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hero from '@/assets/kenya-community.jpg';
@@ -43,10 +45,10 @@ import lifestyle from '@/assets/survey-lifestyle.jpg';
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Survey Pay Kenya — Consumer Research & Opinion Rewards' },
-      { name: 'description', content: 'Participate in consumer surveys and opinion research in Kenya. Share feedback on everyday products and services to earn rewards redeemable via M-Pesa.' },
-      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research & Opinion Rewards' },
-      { property: 'og:description', content: 'Participate in consumer surveys and opinion research in Kenya. Share feedback on everyday products and services to earn rewards.' },
+      { title: 'Survey Pay Kenya — Consumer Research & Community Insights' },
+      { name: 'description', content: 'Participate in consumer surveys and community opinion panels across Kenya. Share feedback on everyday products, local services, and consumer experiences.' },
+      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research & Community Insights' },
+      { property: 'og:description', content: 'Participate in consumer surveys and community opinion panels across Kenya. Share feedback on everyday products and local services.' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
@@ -1764,28 +1766,30 @@ function Index() {
           <section
             className="hero"
             style={{
-              backgroundImage: `linear-gradient(90deg, rgba(16,46,39,.92) 0%, rgba(16,46,39,.72) 37%, rgba(16,46,39,.12) 72%), url(${hero})`,
+              backgroundImage: `linear-gradient(90deg, rgba(16,46,39,.94) 0%, rgba(16,46,39,.78) 42%, rgba(16,46,39,.18) 78%), url(${hero})`,
             }}
           >
             <div className="container hero-content">
               <div className="hero-eyebrow">
-                <span className="hero-spark">🇰🇪</span> CONSUMER RESEARCH & OPINION PANELS IN KENYA <span className="eyebrow-line" />
+                <span className="hero-spark">🇰🇪</span> CONSUMER INSIGHTS & COMMUNITY VOICES IN KENYA <span className="eyebrow-line" />
               </div>
               <h1>
-                Consumer opinion surveys in Kenya.
-                <br />Share your feedback & redeem rewards.
+                Your Voice Matters.
+                <br />Share Insights That Shape Kenya.
               </h1>
-              <p>Join Kenyans participating in market research surveys. Answer questions about consumer goods, banking, and services to earn rewards at your own pace.</p>
+              <p>
+                Join an active community of Kenyan consumers sharing feedback on local services, digital products, and daily retail experiences. Help organizations build better customer solutions through structured opinion polls.
+              </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
-                  Get Started Free <ArrowUpRight />
+                  Join the Community <ArrowUpRight />
                 </Button>
                 <Button
                   className="hero-text"
                   variant="ghost"
                   onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  See how it works <ArrowRight />
+                  How it works <ArrowRight />
                 </Button>
               </div>
               <div className="hero-footnote">
@@ -1794,116 +1798,179 @@ function Index() {
                   <b>A</b>
                   <b>K</b>
                 </span>
-                <span>Trusted market research community across Kenya</span>
+                <span>Community members sharing perspectives across Kenya</span>
               </div>
             </div>
-            <div className="hero-side-label">GOOD IDEAS START WITH YOUR VOICE · EST. IN KENYA</div>
+            <div className="hero-side-label">COMMUNITY OPINION RESEARCH · KENYA</div>
           </section>
 
+          {/* SECTOR FOCUS BAND */}
           <section className="brand-band">
             <div className="container brand-band-inner">
-              <span>CONSUMER SURVEY TOPICS INCLUDE</span>
-              <div className="brand-names">
-                <strong className="safaricom-word">safaricom</strong>
-                <strong className="equity-word">Equity</strong>
-                <strong className="kcb-word">KCB</strong>
-                <strong className="naivas-word">Naivas</strong>
-                <strong className="airtel-word">airtel</strong>
-                <strong className="jumia-word">JUMIA</strong>
+              <span>RESEARCH FOCUS AREAS</span>
+              <div className="brand-names flex flex-wrap gap-4 text-xs font-semibold text-slate-700">
+                <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-md">Telecommunications & Mobile</span>
+                <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-md">Banking & Digital Finance</span>
+                <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-md">Supermarkets & Retail</span>
+                <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-md">Transport & Urban Mobility</span>
+                <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-md">E-Commerce & Delivery</span>
               </div>
             </div>
-            <p className="brand-disclaimer">Brand names and trademarks are property of their respective owners and used solely to indicate survey research categories. Survey Pay Kenya operates independently.</p>
+            <p className="brand-disclaimer text-xs text-gray-500 text-center mt-3">
+              Independent consumer opinion panel facilitating structured market research studies across Kenya.
+            </p>
           </section>
 
-          <section className="container py-4">
-            <div className="p-4 bg-emerald-950/40 border border-emerald-500/20 rounded-xl text-xs text-gray-300 leading-relaxed">
-              <div className="flex items-center gap-2 text-emerald-400 font-semibold mb-1 text-sm">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Research Participation & Compensation Notice</span>
-              </div>
-              <p>
-                Participation in consumer opinion surveys is entirely voluntary. Reward compensation is awarded upon completing valid, authenticated research questionnaires and varies based on survey duration, topic complexity, and research partner requirements. This platform offers market research incentives and does not offer guaranteed recurring employment or fixed investment returns.
-              </p>
-            </div>
-          </section>
-
-          <section className="section-space container landing-surveys">
+          {/* COMMUNITY PILLARS SECTION */}
+          <section className="section-space container" id="about-community">
             <div className="section-heading">
               <div>
-                <div className="section-kicker">THE OPPORTUNITY</div>
+                <div className="section-kicker">CONSUMER PERSPECTIVES</div>
                 <h2>
-                  Good questions.
+                  Real voices.
                   <br />
-                  <em>Better conversations.</em>
+                  <em>Better everyday services.</em>
                 </h2>
-                <p>Browse active consumer research topics. Complete multiple-choice questionnaires and earn rewards credited directly to your account.</p>
+                <p>
+                  Share constructive feedback on the services and consumer goods you interact with every day in Kenya.
+                </p>
               </div>
-              <Button variant="outline" className="section-link" onClick={() => navigate('surveys')}>
-                Browse all surveys <ArrowUpRight />
-              </Button>
             </div>
-            <div className="survey-grid">
-              {surveyData.slice(0, 6).map(s => (
-                <SurveyCardItem
-                  key={s.id}
-                  survey={s}
-                  completed={completed.includes(s.id)}
-                  plan={plan}
-                  unlockedSurveyIds={unlockedSurveyIds}
-                  freeSurveyEarnings={freeSurveyEarnings}
-                  onClick={() => openSurvey(s)}
-                  isLanding={true}
-                />
-              ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                  <Users className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Empowering Local Consumers</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Your feedback helps organizations evaluate customer service quality, billing transparency, and satisfaction across major consumer categories in Kenya.
+                </p>
+              </div>
+
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Structured Opinion Polls</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Participate in quick, objective multiple-choice questionnaires that focus on product usability, internet reliability, and retail shopping preferences.
+                </p>
+              </div>
+
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Private & Confidential</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Responses are aggregated and anonymized for market research insights. In strict compliance with the Kenya Data Protection Act 2019, your identity is always protected.
+                </p>
+              </div>
             </div>
           </section>
 
+          {/* RESEARCH FOCUS AREAS */}
+          <section className="section-space container pt-0">
+            <div className="section-heading">
+              <div>
+                <div className="section-kicker">KEY SECTORS</div>
+                <h2>Explore Research Topics</h2>
+                <p>Learn about the key industries and consumer topics discussed by panel members.</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
+                  Technology & Telecom
+                </span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Digital Connectivity</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Evaluating mobile data speed, 4G/5G coverage, home fibre consistency, and mobile app performance across Kenyan towns.
+                </p>
+              </div>
+
+              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
+                  Finance & Banking
+                </span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Mobile Banking & Payments</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Understanding digital banking adoption, cashless checkout trends, customer support responsiveness, and financial tools.
+                </p>
+              </div>
+
+              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
+                  Retail & Groceries
+                </span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Everyday Shopping Habits</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Gathering household preferences regarding supermarket convenience, produce freshness, product availability, and loyalty offers.
+                </p>
+              </div>
+
+              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
+                  Travel & Mobility
+                </span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Transport & Logistics</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Reviewing daily commute experiences, ride-hailing app accessibility, parcel delivery timelines, and passenger safety.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* HOW IT WORKS */}
           <section className="how-section" id="how-it-works">
             <div className="container how-inner">
               <div className="how-intro">
-                <div className="section-kicker">SIMPLE BY DESIGN</div>
+                <div className="section-kicker">SIMPLE & ACCESSIBLE</div>
                 <h2>
                   Small moments.
                   <br />
                   <em>Big ideas.</em>
                 </h2>
-                <p>Explore topics you care about, share your perspective, and see how a survey journey could work.</p>
+                <p>Participating in consumer opinion research is straightforward and takes just a few minutes.</p>
                 <Button className="dark-button" onClick={start}>
-                  Step inside <ArrowUpRight />
+                  Join the Community <ArrowUpRight />
                 </Button>
               </div>
               <div className="how-steps">
                 <div>
-                  <span>01 / DISCOVER</span>
-                  <h3>Find your fit</h3>
-                  <p>Browse sample surveys across finance, tech, shopping, travel and more.</p>
+                  <span>01 / JOIN</span>
+                  <h3>Create Your Profile</h3>
+                  <p>Register your free panel account to access questionnaires tailored to your region.</p>
                   <Search />
                 </div>
                 <div>
-                  <span>02 / SHARE</span>
-                  <h3>Choose your answers</h3>
-                  <p>Tap through quick multiple-choice questions. No long forms here.</p>
+                  <span>02 / PARTICIPATE</span>
+                  <h3>Answer Simple Questions</h3>
+                  <p>Share your honest perspectives through straightforward multiple-choice questions.</p>
                   <CheckCircle2 />
                 </div>
                 <div>
-                  <span>03 / EXPLORE</span>
-                  <h3>See your progress</h3>
-                  <p>Track your completed surveys and redeem earned rewards securely to your registered M-Pesa account.</p>
-                  <Wallet />
+                  <span>03 / IMPACT</span>
+                  <h3>Shape Consumer Trends</h3>
+                  <p>Help businesses understand real user feedback and improve local services across Kenya.</p>
+                  <Users />
                 </div>
               </div>
             </div>
           </section>
 
+          {/* BOTTOM CTA */}
           <section className="bottom-cta">
             <div className="container bottom-cta-inner">
               <div>
-                <div className="section-kicker">READY WHEN YOU ARE</div>
-                <h2>What do you think?</h2>
-                <p>There’s a place for your perspective.</p>
+                <div className="section-kicker">COMMUNITY PANEL</div>
+                <h2>Your perspective counts.</h2>
+                <p>Join thousands of Kenyans sharing insights on everyday products and services.</p>
               </div>
               <Button className="hero-primary" onClick={start}>
-                Join Free & Start Surveys <ArrowUpRight />
+                Join SurveyPay Kenya <ArrowUpRight />
               </Button>
             </div>
           </section>
@@ -2668,7 +2735,7 @@ function Index() {
               className="text-gray-600 hover:text-emerald-700 underline underline-offset-4 transition-colors font-medium"
               onClick={() => setModal('disclaimer')}
             >
-              Earnings Disclaimer
+              Participation Guidelines
             </button>
             <span className="text-gray-300">·</span>
             <button
@@ -3563,49 +3630,49 @@ function Index() {
               </div>
             )}
 
-            {/* --- EARNINGS DISCLAIMER MODAL --- */}
+            {/* --- PARTICIPATION GUIDELINES MODAL --- */}
             {modal === 'disclaimer' && (
               <div className="modal-body max-h-[75vh] overflow-y-auto">
-                <div className="modal-icon text-amber-600 bg-amber-50">
-                  <AlertTriangle />
+                <div className="modal-icon text-emerald-600 bg-emerald-50">
+                  <ShieldCheck />
                 </div>
-                <div className="modal-kicker text-amber-700">IMPORTANT NOTICE</div>
-                <h2>Earnings & Participation Disclaimer</h2>
+                <div className="modal-kicker text-emerald-700">COMMUNITY STANDARDS</div>
+                <h2>Research Participation Guidelines</h2>
                 <p className="text-xs text-gray-500 mb-4">
-                  Transparency regarding survey incentives, availability, and compensation.
+                  Transparency regarding survey methodology, eligibility, and community feedback standards.
                 </p>
 
                 <div className="space-y-4 text-xs text-gray-700 leading-relaxed">
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
-                    <p className="font-semibold text-amber-900">
-                      Survey Pay Kenya is a market research panel, not an employment opportunity, salary contract, or financial investment vehicle.
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-md">
+                    <p className="font-semibold text-emerald-900">
+                      Survey Pay Kenya is an independent consumer research community. Participation in all studies is 100% voluntary.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">1. Variable Survey Availability</h4>
+                    <h4 className="font-bold text-gray-900 mb-1">1. Study Availability & Criteria</h4>
                     <p>
-                      Survey opportunities depend upon active research projects commissioned by partner organizations, client budgets, and specific demographic criteria (e.g., location, age, consumer habits). We cannot guarantee a fixed number of surveys per day or month.
+                      Research topics depend upon current consumer sentiment studies, partner research agendas, and target demographic criteria. Questionnaire availability varies dynamically based on project quotas.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">2. Reward Determination</h4>
+                    <h4 className="font-bold text-gray-900 mb-1">2. Quality & Thoughtful Responses</h4>
                     <p>
-                      Incentive amounts (e.g. KSh 150 per questionnaire) are compensation for panelist time and effort. Rewards are only credited when a respondent successfully completes all required questions within reasonable time parameters and passes screening criteria.
+                      Research partners rely on accurate, genuine feedback. Responses must reflect personal consumer experiences and pass consistency and quality checks.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">3. Minimum Withdrawal & Account Tiers</h4>
+                    <h4 className="font-bold text-gray-900 mb-1">3. Privacy & Independent Research</h4>
                     <p>
-                      To prevent fraud and maintain platform liquidity, redemptions require reaching a minimum balance of KSh 2,500. Free accounts are subject to a standard daily withdrawal cap of KSh 3,000. Upgrades are optional and increase daily limits for high-volume respondents.
+                      Responses are aggregated and anonymized for market trend analysis. We do not sell personally identifiable contact data or distribute unsolicited third-party solicitations.
                     </p>
                   </div>
                 </div>
 
                 <Button className="card-action w-full py-2.5 mt-5 font-bold" onClick={closeModal}>
-                  Got It
+                  Understood
                 </Button>
               </div>
             )}
@@ -3619,7 +3686,7 @@ function Index() {
                 <div className="modal-kicker text-emerald-700">WE'RE HERE TO HELP</div>
                 <h2>Contact & Support</h2>
                 <p className="text-xs text-gray-500 mb-4">
-                  Need assistance with your account, survey verification, or M-Pesa payout?
+                  Need assistance with your account, survey access, or research questions?
                 </p>
 
                 <div className="space-y-3 text-xs text-gray-700">
@@ -3721,7 +3788,6 @@ function SurveyCardItem({
   unlockedSurveyIds = [],
   freeSurveyEarnings = 0,
   onClick,
-  isLanding = false,
 }: {
   survey: Survey;
   completed: boolean;
@@ -3729,7 +3795,6 @@ function SurveyCardItem({
   unlockedSurveyIds?: number[];
   freeSurveyEarnings?: number;
   onClick: () => void;
-  isLanding?: boolean;
 }) {
   const isLocked =
     !unlockedSurveyIds.includes(survey.id) &&
@@ -3750,13 +3815,8 @@ function SurveyCardItem({
         />
         <span className="survey-category">{survey.category}</span>
 
-        {/* TOP STATUS PILL ON CARDS */}
-        {isLanding ? (
-          <span className="card-trigger-pill free">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            <span>Active Research Topic</span>
-          </span>
-        ) : isLocked ? (
+        {/* POTENTIAL EARNINGS TRIGGER PILL ON CARDS */}
+        {isLocked ? (
           <span className="card-trigger-pill">
             <LockKeyhole className="w-3 h-3 text-amber-400" />
             <span>Potential: <strong>+KSh {survey.potential.toLocaleString()}</strong></span>
@@ -3787,46 +3847,31 @@ function SurveyCardItem({
 
         <h3>{survey.topic}</h3>
 
-        {/* POTENTIAL EARNINGS / STUDY TYPE BOX */}
-        {isLanding ? (
-          <div className="card-potential-box">
-            <span className="potential-label">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" /> Study Category:
-            </span>
-            <span className="potential-val text-xs text-emerald-800 font-bold">
-              Consumer Opinion Research
-            </span>
-          </div>
-        ) : (
-          <div className={`card-potential-box ${isLocked ? 'locked-box' : ''}`}>
-            <span className="potential-label">
-              <TrendingUp className="w-3.5 h-3.5" /> Est. Daily Potential:
-            </span>
-            <span className="potential-val">
-              {isLocked ? survey.potentialDaily : 'KSh 2,000/day'}
-            </span>
-          </div>
-        )}
+        {/* POTENTIAL EARNINGS CALLOUT BOX */}
+        <div className={`card-potential-box ${isLocked ? 'locked-box' : ''}`}>
+          <span className="potential-label">
+            <TrendingUp className="w-3.5 h-3.5" /> Est. Daily Potential:
+          </span>
+          <span className="potential-val">
+            {isLocked ? survey.potentialDaily : 'KSh 2,000/day'}
+          </span>
+        </div>
 
         <div className="survey-card-footer">
           <span>
             <Clock3 /> {survey.time} · 5 Questions
           </span>
-          <strong>{isLanding ? 'Reward Eligible' : completed ? 'Completed' : `+ KSh ${survey.potential.toLocaleString()}`}</strong>
+          <strong>{completed ? 'Completed' : `+ KSh ${survey.potential.toLocaleString()}`}</strong>
         </div>
 
-        {/* VIBRANT TAKE SURVEY BUTTON */}
+        {/* VIBRANT TAKE SURVEY BUTTON WITH COLOR */}
         <Button
-          className={`card-action ${completed && !isLanding ? 'card-action-completed' : isLocked && !isLanding ? 'card-action-locked' : 'card-action-take'}`}
+          className={`card-action ${completed ? 'card-action-completed' : isLocked ? 'card-action-locked' : 'card-action-take'}`}
           onClick={onClick}
-          disabled={completed && !isLanding}
+          disabled={completed}
         >
           <span>
-            {isLanding ? (
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-200" /> Start Survey
-              </span>
-            ) : completed ? (
+            {completed ? (
               <span className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-emerald-700" /> Completed (+KSh {survey.potential.toLocaleString()})
               </span>
@@ -3840,7 +3885,7 @@ function SurveyCardItem({
               </span>
             )}
           </span>
-          {isLanding ? <ArrowRight className="w-4 h-4" /> : completed ? <Check className="w-4 h-4" /> : isLocked ? <LockKeyhole className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          {completed ? <Check className="w-4 h-4" /> : isLocked ? <LockKeyhole className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
         </Button>
       </div>
     </article>
