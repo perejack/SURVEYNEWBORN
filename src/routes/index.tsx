@@ -32,6 +32,7 @@ import {
   Smartphone,
   TrendingUp,
   LogOut,
+  FileText,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hero from '@/assets/kenya-community.jpg';
@@ -42,10 +43,10 @@ import lifestyle from '@/assets/survey-lifestyle.jpg';
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Survey Pay Kenya — Complete Simple Surveys Online & Get Paid via M-Pesa' },
-      { name: 'description', content: 'Complete simple surveys online and get paid KSh 150 directly to your M-Pesa. Earn by answering simple surveys online. Start today — limited slots.' },
-      { property: 'og:title', content: 'Survey Pay Kenya — Get Paid to Do Surveys' },
-      { property: 'og:description', content: 'Complete simple surveys online and get paid directly to your M-Pesa.' },
+      { title: 'Survey Pay Kenya — Consumer Research & Opinion Rewards' },
+      { name: 'description', content: 'Participate in consumer surveys and opinion research in Kenya. Share feedback on everyday products and services to earn rewards redeemable via M-Pesa.' },
+      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research & Opinion Rewards' },
+      { property: 'og:description', content: 'Participate in consumer surveys and opinion research in Kenya. Share feedback on everyday products and services to earn rewards.' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
@@ -54,7 +55,7 @@ export const Route = createFileRoute('/')({
 });
 
 type View = 'landing' | 'home' | 'surveys' | 'wallet' | 'profile';
-type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'locked' | 'run_out_free' | 'auth' | null;
+type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
 
 interface Question {
   question: string;
@@ -1160,9 +1161,9 @@ function Index() {
   const [withdrawalDbId, setWithdrawalDbId] = useState<string | null>(null);
   const [stkStatusMsg, setStkStatusMsg] = useState('');
 
-  // Strategic Social Proof & FOMO Toasts (only shown when user is NOT taking a survey)
+  // Strategic Social Proof Toasts (only shown inside dashboard for authenticated users, never on public landing)
   useEffect(() => {
-    if (modal === 'survey' || toastDismissed) {
+    if (modal === 'survey' || toastDismissed || view === 'landing') {
       setShowToast(false);
       return;
     }
@@ -1187,7 +1188,7 @@ function Index() {
       clearInterval(interval);
       clearTimeout(initialTimer);
     };
-  }, [modal, toastDismissed]);
+  }, [modal, toastDismissed, view]);
 
   // Auth session sync — load user on mount, persist to/from Supabase
   useEffect(() => {
@@ -1716,16 +1717,16 @@ function Index() {
           >
             <div className="container hero-content">
               <div className="hero-eyebrow">
-                <span className="hero-spark">🔥</span> KENYA'S HIGHEST PAYING OPINION NETWORK · INSTANT M-PESA PAYOUTS <span className="eyebrow-line" />
+                <span className="hero-spark">🇰🇪</span> CONSUMER RESEARCH & OPINION PANELS IN KENYA <span className="eyebrow-line" />
               </div>
               <h1>
-                Complete simple surveys online
-                <br />and get paid <em>KSh 150</em> directly to your M-Pesa.
+                Share your opinion on top brands.
+                <br />Earn verified rewards via M-Pesa.
               </h1>
-              <p>Earn by answering simple surveys online. Get paid via M-Pesa. Start today — limited slots available across Kenya!</p>
+              <p>Join Kenyans participating in market research surveys. Answer questions about consumer goods, banking, and services to earn rewards at your own pace.</p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
-                  Start Earning Now 💸 <ArrowUpRight />
+                  Get Started Free <ArrowUpRight />
                 </Button>
                 <Button
                   className="hero-text"
@@ -1741,7 +1742,7 @@ function Index() {
                   <b>A</b>
                   <b>K</b>
                 </span>
-                <span>Made for curious minds across Kenya</span>
+                <span>Trusted market research community across Kenya</span>
               </div>
             </div>
             <div className="hero-side-label">GOOD IDEAS START WITH YOUR VOICE · EST. IN KENYA</div>
@@ -1749,7 +1750,7 @@ function Index() {
 
           <section className="brand-band">
             <div className="container brand-band-inner">
-              <span>INSPIRED BY EVERYDAY BRANDS</span>
+              <span>CONSUMER SURVEY TOPICS INCLUDE</span>
               <div className="brand-names">
                 <strong className="safaricom-word">safaricom</strong>
                 <strong className="equity-word">Equity</strong>
@@ -1759,7 +1760,19 @@ function Index() {
                 <strong className="jumia-word">JUMIA</strong>
               </div>
             </div>
-            <p className="brand-disclaimer">Brand names are illustrative examples; Survey Pay Kenya is not affiliated with these companies.</p>
+            <p className="brand-disclaimer">Brand names and trademarks are property of their respective owners and used solely to indicate survey research categories. Survey Pay Kenya operates independently.</p>
+          </section>
+
+          <section className="container py-4">
+            <div className="p-4 bg-emerald-950/40 border border-emerald-500/20 rounded-xl text-xs text-gray-300 leading-relaxed">
+              <div className="flex items-center gap-2 text-emerald-400 font-semibold mb-1 text-sm">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Research Participation & Compensation Notice</span>
+              </div>
+              <p>
+                Participation in consumer opinion surveys is entirely voluntary. Reward compensation is awarded upon completing valid, authenticated research questionnaires and varies based on survey duration, topic complexity, and research partner requirements. This platform offers market research incentives and does not offer guaranteed recurring employment or fixed investment returns.
+              </p>
+            </div>
           </section>
 
           <section className="section-space container landing-surveys">
@@ -1771,7 +1784,7 @@ function Index() {
                   <br />
                   <em>Better conversations.</em>
                 </h2>
-                <p>Take a peek at the topics waiting for your perspective. Complete 5 multiple choice questions and earn simulated rewards.</p>
+                <p>Browse active consumer research topics. Complete multiple-choice questionnaires and earn rewards credited directly to your account.</p>
               </div>
               <Button variant="outline" className="section-link" onClick={() => navigate('surveys')}>
                 Browse all surveys <ArrowUpRight />
@@ -1822,7 +1835,7 @@ function Index() {
                 <div>
                   <span>03 / EXPLORE</span>
                   <h3>See your progress</h3>
-                  <p>Watch your simulated rewards and completed surveys in one place.</p>
+                  <p>Track your completed surveys and redeem earned rewards securely to your registered M-Pesa account.</p>
                   <Wallet />
                 </div>
               </div>
@@ -1837,7 +1850,7 @@ function Index() {
                 <p>There’s a place for your perspective.</p>
               </div>
               <Button className="hero-primary" onClick={start}>
-                Explore SurveyPay <ArrowUpRight />
+                Join Free & Start Surveys <ArrowUpRight />
               </Button>
             </div>
           </section>
@@ -2532,10 +2545,47 @@ function Index() {
               <i />
             </span>
             <strong>SurveyPay Kenya.</strong>
-            <span>Your voice belongs here.</span>
+            <span>Consumer Research & Opinion Panels</span>
           </div>
-          <p>Concept preview only. No affiliation with listed brands. No real payments or earnings.</p>
-          <span>© 2026 SurveyPay Kenya</span>
+
+          <div className="footer-links flex flex-wrap items-center justify-center gap-4 text-xs my-2">
+            <button
+              type="button"
+              className="text-gray-600 hover:text-emerald-700 underline underline-offset-4 transition-colors font-medium"
+              onClick={() => setModal('privacy')}
+            >
+              Privacy Policy
+            </button>
+            <span className="text-gray-300">·</span>
+            <button
+              type="button"
+              className="text-gray-600 hover:text-emerald-700 underline underline-offset-4 transition-colors font-medium"
+              onClick={() => setModal('terms')}
+            >
+              Terms of Service
+            </button>
+            <span className="text-gray-300">·</span>
+            <button
+              type="button"
+              className="text-gray-600 hover:text-emerald-700 underline underline-offset-4 transition-colors font-medium"
+              onClick={() => setModal('disclaimer')}
+            >
+              Earnings Disclaimer
+            </button>
+            <span className="text-gray-300">·</span>
+            <button
+              type="button"
+              className="text-gray-600 hover:text-emerald-700 underline underline-offset-4 transition-colors font-medium"
+              onClick={() => setModal('contact')}
+            >
+              Contact Support
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-500 max-w-xl text-center mx-auto my-1 leading-relaxed">
+            Survey Pay Kenya is an independent market research panel. Survey participation is voluntary. Brand names and logos are trademarks of their respective owners and used solely for consumer research categorization.
+          </p>
+          <span className="text-xs text-gray-400">© 2026 SurveyPay Kenya. All rights reserved.</span>
         </div>
       </footer>
 
@@ -3308,12 +3358,208 @@ function Index() {
                 </Button>
               </div>
             )}
+
+            {/* --- PRIVACY POLICY MODAL --- */}
+            {modal === 'privacy' && (
+              <div className="modal-body max-h-[75vh] overflow-y-auto">
+                <div className="modal-icon text-emerald-600 bg-emerald-50">
+                  <ShieldCheck />
+                </div>
+                <div className="modal-kicker text-emerald-700">DATA PRIVACY & PROTECTION</div>
+                <h2>Privacy Policy</h2>
+                <p className="text-xs text-gray-500 mb-4">
+                  Last updated: January 2026 · Compliant with the Kenya Data Protection Act (KDPA) 2019.
+                </p>
+
+                <div className="space-y-4 text-xs text-gray-700 leading-relaxed">
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">1. Information We Collect</h4>
+                    <p>
+                      When you register and use Survey Pay Kenya, we collect:
+                    </p>
+                    <ul className="list-disc pl-4 mt-1 space-y-1 text-gray-600">
+                      <li>Contact details: Your registered email address and M-Pesa mobile phone number.</li>
+                      <li>Demographic data: Age range, gender, county of residence, and general consumer preferences.</li>
+                      <li>Survey responses: Opinions, feedback, and questionnaire selections submitted during active studies.</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">2. Purpose & Use of Data</h4>
+                    <p>
+                      Personal data is processed strictly for:
+                    </p>
+                    <ul className="list-disc pl-4 mt-1 space-y-1 text-gray-600">
+                      <li>Matching panelists with relevant consumer research studies and demographic requirements.</li>
+                      <li>Verifying survey completion authenticity and processing reward redemptions via M-Pesa.</li>
+                      <li>Generating anonymized, aggregated research statistics for consumer insights. We never sell your personal contact info for unsolicited third-party marketing.</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">3. Data Security & Storage</h4>
+                    <p>
+                      All transmission of data between your browser and our servers is secured via 256-bit SSL encryption. We employ industry-standard access controls to safeguard panelist records against unauthorized access.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">4. Your Rights</h4>
+                    <p>
+                      Under the Kenya Data Protection Act, you possess the right to access, rectify, or request erasure of your personal data. You may withdraw consent or close your panel account at any time by contacting <strong>privacy@surveypay.co.ke</strong>.
+                    </p>
+                  </div>
+                </div>
+
+                <Button className="card-action w-full py-2.5 mt-5 font-bold" onClick={closeModal}>
+                  I Understand & Agree
+                </Button>
+              </div>
+            )}
+
+            {/* --- TERMS OF SERVICE MODAL --- */}
+            {modal === 'terms' && (
+              <div className="modal-body max-h-[75vh] overflow-y-auto">
+                <div className="modal-icon text-blue-600 bg-blue-50">
+                  <FileText />
+                </div>
+                <div className="modal-kicker text-blue-700">USER AGREEMENT</div>
+                <h2>Terms of Service</h2>
+                <p className="text-xs text-gray-500 mb-4">
+                  Please review the rules governing voluntary participation on Survey Pay Kenya.
+                </p>
+
+                <div className="space-y-4 text-xs text-gray-700 leading-relaxed">
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">1. Eligibility</h4>
+                    <p>
+                      Membership is open solely to natural individuals residing in Kenya who are at least 18 years of age and hold an active, registered Safaricom M-Pesa line in their own name.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">2. Honest & Authentic Participation</h4>
+                    <p>
+                      Panelists agree to provide genuine, thoughtful responses to all survey questions. The use of automated scripts, bots, rapid random clicking, duplicate accounts, or fraudulent demographic data is strictly prohibited and results in immediate forfeiture of rewards and account termination.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">3. Rewards & Redemptions</h4>
+                    <p>
+                      Reward credits are granted upon satisfactory completion of eligible surveys as validated by quality control checks. Redemptions are issued via M-Pesa in Kenya Shillings (KSh). Minimum withdrawal limits and tier thresholds apply as outlined in the member dashboard.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">4. Intellectual Property & Brand References</h4>
+                    <p>
+                      All survey questions, methodologies, and content are protected. Company logos and brand names displayed on the portal are the property of their respective trademark holders and serve solely to indicate research categories.
+                    </p>
+                  </div>
+                </div>
+
+                <Button className="card-action w-full py-2.5 mt-5 font-bold" onClick={closeModal}>
+                  Close & Return
+                </Button>
+              </div>
+            )}
+
+            {/* --- EARNINGS DISCLAIMER MODAL --- */}
+            {modal === 'disclaimer' && (
+              <div className="modal-body max-h-[75vh] overflow-y-auto">
+                <div className="modal-icon text-amber-600 bg-amber-50">
+                  <AlertTriangle />
+                </div>
+                <div className="modal-kicker text-amber-700">IMPORTANT NOTICE</div>
+                <h2>Earnings & Participation Disclaimer</h2>
+                <p className="text-xs text-gray-500 mb-4">
+                  Transparency regarding survey incentives, availability, and compensation.
+                </p>
+
+                <div className="space-y-4 text-xs text-gray-700 leading-relaxed">
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
+                    <p className="font-semibold text-amber-900">
+                      Survey Pay Kenya is a market research panel, not an employment opportunity, salary contract, or financial investment vehicle.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">1. Variable Survey Availability</h4>
+                    <p>
+                      Survey opportunities depend upon active research projects commissioned by partner organizations, client budgets, and specific demographic criteria (e.g., location, age, consumer habits). We cannot guarantee a fixed number of surveys per day or month.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">2. Reward Determination</h4>
+                    <p>
+                      Incentive amounts (e.g. KSh 150 per questionnaire) are compensation for panelist time and effort. Rewards are only credited when a respondent successfully completes all required questions within reasonable time parameters and passes screening criteria.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-1">3. Minimum Withdrawal & Account Tiers</h4>
+                    <p>
+                      To prevent fraud and maintain platform liquidity, redemptions require reaching a minimum balance of KSh 2,500. Free accounts are subject to a standard daily withdrawal cap of KSh 3,000. Upgrades are optional and increase daily limits for high-volume respondents.
+                    </p>
+                  </div>
+                </div>
+
+                <Button className="card-action w-full py-2.5 mt-5 font-bold" onClick={closeModal}>
+                  Got It
+                </Button>
+              </div>
+            )}
+
+            {/* --- CONTACT SUPPORT MODAL --- */}
+            {modal === 'contact' && (
+              <div className="modal-body">
+                <div className="modal-icon text-emerald-600 bg-emerald-50">
+                  <HelpCircle />
+                </div>
+                <div className="modal-kicker text-emerald-700">WE'RE HERE TO HELP</div>
+                <h2>Contact & Support</h2>
+                <p className="text-xs text-gray-500 mb-4">
+                  Need assistance with your account, survey verification, or M-Pesa payout?
+                </p>
+
+                <div className="space-y-3 text-xs text-gray-700">
+                  <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
+                    <strong className="block text-gray-900 font-bold mb-0.5">Email Support</strong>
+                    <span className="text-emerald-700 font-mono text-sm font-semibold">support@surveypay.co.ke</span>
+                    <p className="text-gray-500 text-[11px] mt-1">Average response time: 2 – 4 hours during business days.</p>
+                  </div>
+
+                  <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
+                    <strong className="block text-gray-900 font-bold mb-0.5">Operating Hours (East Africa Time)</strong>
+                    <p className="text-gray-600 text-[11px]">
+                      Monday – Friday: 8:00 AM – 6:00 PM EAT<br />
+                      Saturday: 9:00 AM – 2:00 PM EAT<br />
+                      Sunday & Public Holidays: Closed
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
+                    <strong className="block text-gray-900 font-bold mb-0.5">Head Office</strong>
+                    <p className="text-gray-600 text-[11px]">
+                      Survey Pay Research & Media Labs<br />
+                      Westlands Commercial Hub, Nairobi, Kenya
+                    </p>
+                  </div>
+                </div>
+
+                <Button className="card-action w-full py-2.5 mt-4 font-bold" onClick={closeModal}>
+                  Close
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Strategic Live Social Proof & FOMO Notification Toast */}
-      {showToast && modal !== 'survey' && !toastDismissed && (
+      {/* Strategic Live Social Proof Toast (only on dashboard for active members, never on public landing) */}
+      {showToast && modal !== 'survey' && !toastDismissed && view !== 'landing' && (
         <aside className="live-proof-toast" role="status" aria-live="polite">
           <div
             className="live-proof-avatar"
