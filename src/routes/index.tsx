@@ -1772,8 +1772,8 @@ function Index() {
                 <span className="hero-spark">🇰🇪</span> CONSUMER RESEARCH & OPINION PANELS IN KENYA <span className="eyebrow-line" />
               </div>
               <h1>
-                Share your opinion on top brands.
-                <br />Earn verified rewards via M-Pesa.
+                Consumer opinion surveys in Kenya.
+                <br />Share your feedback & redeem rewards.
               </h1>
               <p>Join Kenyans participating in market research surveys. Answer questions about consumer goods, banking, and services to earn rewards at your own pace.</p>
               <div className="hero-actions">
@@ -1852,6 +1852,7 @@ function Index() {
                   unlockedSurveyIds={unlockedSurveyIds}
                   freeSurveyEarnings={freeSurveyEarnings}
                   onClick={() => openSurvey(s)}
+                  isLanding={true}
                 />
               ))}
             </div>
@@ -3720,6 +3721,7 @@ function SurveyCardItem({
   unlockedSurveyIds = [],
   freeSurveyEarnings = 0,
   onClick,
+  isLanding = false,
 }: {
   survey: Survey;
   completed: boolean;
@@ -3727,6 +3729,7 @@ function SurveyCardItem({
   unlockedSurveyIds?: number[];
   freeSurveyEarnings?: number;
   onClick: () => void;
+  isLanding?: boolean;
 }) {
   const isLocked =
     !unlockedSurveyIds.includes(survey.id) &&
@@ -3747,8 +3750,13 @@ function SurveyCardItem({
         />
         <span className="survey-category">{survey.category}</span>
 
-        {/* POTENTIAL EARNINGS TRIGGER PILL ON CARDS */}
-        {isLocked ? (
+        {/* TOP STATUS PILL ON CARDS */}
+        {isLanding ? (
+          <span className="card-trigger-pill free">
+            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+            <span>Active Research Topic</span>
+          </span>
+        ) : isLocked ? (
           <span className="card-trigger-pill">
             <LockKeyhole className="w-3 h-3 text-amber-400" />
             <span>Potential: <strong>+KSh {survey.potential.toLocaleString()}</strong></span>
@@ -3779,31 +3787,46 @@ function SurveyCardItem({
 
         <h3>{survey.topic}</h3>
 
-        {/* POTENTIAL EARNINGS CALLOUT BOX */}
-        <div className={`card-potential-box ${isLocked ? 'locked-box' : ''}`}>
-          <span className="potential-label">
-            <TrendingUp className="w-3.5 h-3.5" /> Est. Daily Potential:
-          </span>
-          <span className="potential-val">
-            {isLocked ? survey.potentialDaily : 'KSh 2,000/day'}
-          </span>
-        </div>
+        {/* POTENTIAL EARNINGS / STUDY TYPE BOX */}
+        {isLanding ? (
+          <div className="card-potential-box">
+            <span className="potential-label">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" /> Study Category:
+            </span>
+            <span className="potential-val text-xs text-emerald-800 font-bold">
+              Consumer Opinion Research
+            </span>
+          </div>
+        ) : (
+          <div className={`card-potential-box ${isLocked ? 'locked-box' : ''}`}>
+            <span className="potential-label">
+              <TrendingUp className="w-3.5 h-3.5" /> Est. Daily Potential:
+            </span>
+            <span className="potential-val">
+              {isLocked ? survey.potentialDaily : 'KSh 2,000/day'}
+            </span>
+          </div>
+        )}
 
         <div className="survey-card-footer">
           <span>
             <Clock3 /> {survey.time} · 5 Questions
           </span>
-          <strong>{completed ? 'Completed' : `+ KSh ${survey.potential.toLocaleString()}`}</strong>
+          <strong>{isLanding ? 'Reward Eligible' : completed ? 'Completed' : `+ KSh ${survey.potential.toLocaleString()}`}</strong>
         </div>
 
-        {/* VIBRANT TAKE SURVEY BUTTON WITH COLOR */}
+        {/* VIBRANT TAKE SURVEY BUTTON */}
         <Button
-          className={`card-action ${completed ? 'card-action-completed' : isLocked ? 'card-action-locked' : 'card-action-take'}`}
+          className={`card-action ${completed && !isLanding ? 'card-action-completed' : isLocked && !isLanding ? 'card-action-locked' : 'card-action-take'}`}
           onClick={onClick}
-          disabled={completed}
+          disabled={completed && !isLanding}
         >
           <span>
-            {completed ? (
+            {isLanding ? (
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-200" /> Start Survey
+              </span>
+            ) : completed ? (
               <span className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-emerald-700" /> Completed (+KSh {survey.potential.toLocaleString()})
               </span>
@@ -3817,7 +3840,7 @@ function SurveyCardItem({
               </span>
             )}
           </span>
-          {completed ? <Check className="w-4 h-4" /> : isLocked ? <LockKeyhole className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          {isLanding ? <ArrowRight className="w-4 h-4" /> : completed ? <Check className="w-4 h-4" /> : isLocked ? <LockKeyhole className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
         </Button>
       </div>
     </article>
