@@ -1264,7 +1264,44 @@ function Index() {
   // Free: 3,000/day; Basic: 10,000/day; Lite: 25,000/day; Platinum: 100,000/day
   const currentDailyLimit = !plan || plan === 'Free' ? 3000 : plan === 'Basic' ? 10000 : plan === 'Lite' ? 25000 : 100000;
 
-  const filteredSurveys = surveyData.filter(s => (filter === 'All' || s.category === filter) && `${s.company} ${s.topic}`.toLowerCase().includes(search.toLowerCase()));
+  const filteredSurveys = surveyData.filter(s => {
+    // 1. Category filter
+    const matchesCategory = filter === 'All' || s.category === filter;
+    if (!matchesCategory) return false;
+
+    // 2. Search query filter
+    const query = search.trim().toLowerCase();
+    if (!query) return true;
+
+    // Build comprehensive searchable corpus for this survey
+    const searchableFields = [
+      s.company,
+      s.topic,
+      s.category,
+      `ksh ${s.potential}`,
+      `ksh${s.potential}`,
+      `${s.potential}`,
+      s.potentialDaily,
+      s.potentialDaily.replace(/,/g, ''),
+      s.time,
+    ].join(' ').toLowerCase();
+
+    // Check all words/terms in query
+    const terms = query.split(/\s+/).filter(Boolean);
+    return terms.every(term => {
+      // Direct text match (company name, topic keywords, category, or formatted amount)
+      if (searchableFields.includes(term)) return true;
+
+      // Numeric amount match (e.g. searching "150", "600", "800", "1000", "1500")
+      const termNumeric = term.replace(/[^\d]/g, '');
+      if (termNumeric) {
+        if (s.potential.toString().includes(termNumeric)) return true;
+        if (s.potentialDaily.replace(/[^\d]/g, '').includes(termNumeric)) return true;
+      }
+
+      return false;
+    });
+  });
 
   const closeModal = () => {
     setModal(null);
@@ -2151,15 +2188,29 @@ function Index() {
                 </div>
 
                 <div className="survey-tools">
-                  <div className="search-field">
-                    <Search />
-                    <input
-                      aria-label="Search surveys"
-                      placeholder="Search brands or topics..."
-                      value={search}
-                      onChange={e => setSearch(e.target.value)}
-                    />
+                  <div className="search-field flex items-center justify-between w-full max-w-lg">
+                    <div className="flex items-center gap-2 flex-1">
+                      <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <input
+                        aria-label="Search surveys by brand name or reward amount"
+                        placeholder="Search by brand name or reward amount (e.g. Safaricom, 150, 600)..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="w-full bg-transparent outline-none text-xs sm:text-sm text-gray-900 placeholder:text-gray-400"
+                      />
+                    </div>
+                    {search && (
+                      <button
+                        type="button"
+                        onClick={() => setSearch('')}
+                        className="text-gray-400 hover:text-gray-600 p-1 transition-colors"
+                        aria-label="Clear search"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
+
                   <div className="filter-scroll">
                     {['All', 'Technology', 'Finance', 'Lifestyle', 'Travel', 'Entertainment'].map(f => (
                       <Button
@@ -2171,6 +2222,37 @@ function Index() {
                         {f}
                       </Button>
                     ))}
+                  </div>
+
+                  {/* Quick Amount Search Badges */}
+                  <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground pt-1">
+                    <span className="font-semibold text-gray-500 text-[11px]">Filter by Reward Amount:</span>
+                    {['150', '600', '650', '700', '750', '800', '900', '1000'].map(amt => {
+                      const isSelected = search.trim() === amt;
+                      return (
+                        <button
+                          key={amt}
+                          type="button"
+                          className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all ${
+                            isSelected
+                              ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
+                              : 'bg-white hover:bg-emerald-50 text-emerald-800 border-emerald-200'
+                          }`}
+                          onClick={() => setSearch(prev => prev.trim() === amt ? '' : amt)}
+                        >
+                          KSh {Number(amt).toLocaleString()}
+                        </button>
+                      );
+                    })}
+                    {search && (
+                      <button
+                        type="button"
+                        className="text-[11px] text-red-600 hover:text-red-700 underline font-semibold ml-1 cursor-pointer"
+                        onClick={() => setSearch('')}
+                      >
+                        Clear filter
+                      </button>
+                    )}
                   </div>
                 </div>
 
