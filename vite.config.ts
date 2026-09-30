@@ -31,8 +31,8 @@ export default defineConfig({
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      api_key: "5ce253a8b7ec86f1952c445ba676799c089de738665cd1e10b274a087bb5152f",
-                      account_id: "HP935181",
+                      api_key: process.env['HASHBACK_API_KEY'] || "9851f07892796e5ab74e04b89e6d623e15363438b39213ec4224fa2805c746f5",
+                      account_id: process.env['HASHBACK_ACCOUNT_ID'] || "HP464530",
                       amount: String(amount),
                       msisdn: normalizedPhone,
                       reference: ref,
@@ -70,8 +70,8 @@ export default defineConfig({
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      api_key: "5ce253a8b7ec86f1952c445ba676799c089de738665cd1e10b274a087bb5152f",
-                      account_id: "HP935181",
+                      api_key: process.env['HASHBACK_API_KEY'] || "9851f07892796e5ab74e04b89e6d623e15363438b39213ec4224fa2805c746f5",
+                      account_id: process.env['HASHBACK_ACCOUNT_ID'] || "HP464530",
                       checkoutid: checkoutId,
                     }),
                   });
