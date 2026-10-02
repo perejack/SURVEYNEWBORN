@@ -1763,6 +1763,7 @@ function Index() {
 
       {view === 'landing' ? (
         <main>
+          {/* ── HERO ── */}
           <section
             className="hero"
             style={{
@@ -1771,14 +1772,17 @@ function Index() {
           >
             <div className="container hero-content">
               <div className="hero-eyebrow">
-                <span className="hero-spark">🇰🇪</span> CONSUMER INSIGHTS & COMMUNITY VOICES IN KENYA <span className="eyebrow-line" />
+                <span className="hero-spark">🇰🇪</span> KENYA'S INDEPENDENT CONSUMER RESEARCH PANEL <span className="eyebrow-line" />
               </div>
               <h1>
-                Your Voice Matters.
-                <br />Share Insights That Shape Kenya.
+                Your Opinion Shapes
+                <br />Kenya's Biggest Brands.
               </h1>
               <p>
-                Join an active community of Kenyan consumers sharing feedback on local services, digital products, and daily retail experiences. Help organizations build better customer solutions through structured opinion polls.
+                Survey Pay Kenya is a free online consumer research panel. Thousands of Kenyans complete
+                short multiple-choice questionnaires to help telecom companies, banks, supermarkets, and
+                retailers improve their everyday services. Registration is free, surveys are quick, and
+                your responses are always kept private and anonymous.
               </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
@@ -1798,13 +1802,107 @@ function Index() {
                   <b>A</b>
                   <b>K</b>
                 </span>
-                <span>Community members sharing perspectives across Kenya</span>
+                <span>Thousands of Kenyans already sharing their opinions every week</span>
               </div>
             </div>
-            <div className="hero-side-label">COMMUNITY OPINION RESEARCH · KENYA</div>
+            <div className="hero-side-label">FREE CONSUMER SURVEY PANEL · KENYA</div>
           </section>
 
-          {/* SECTOR FOCUS BAND */}
+          {/* ── TRUST STATS BAR ── */}
+          <section className="bg-emerald-700 text-white py-6">
+            <div className="container">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                  <div className="text-2xl font-extrabold">10,000+</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Registered Panel Members</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-extrabold">5 Min</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Average Survey Duration</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-extrabold">5+</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Active Research Categories</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-extrabold">100%</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Free to Join & Participate</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── ABOUT / MISSION ── */}
+          <section className="section-space container" id="about-community">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="section-kicker">ABOUT SURVEY PAY KENYA</div>
+                <h2 className="text-3xl font-extrabold text-slate-900 leading-tight mt-2 mb-4">
+                  Kenya's trusted voice for consumer market research
+                </h2>
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                  Survey Pay Kenya is an independent online market research panel based in Nairobi,
+                  Kenya. We partner with organisations across telecommunications, banking, retail, and
+                  logistics who want to understand how Kenyan consumers experience their products and
+                  services in daily life.
+                </p>
+                <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                  As a registered panel member you gain access to short, structured questionnaires on
+                  topics relevant to your everyday life in Kenya. Your anonymised responses contribute
+                  directly to research reports that help brands improve customer service, product design,
+                  and pricing transparency for millions of Kenyans.
+                </p>
+                <div className="flex flex-col gap-3">
+                  {[
+                    'Completely free to join — no hidden fees or charges',
+                    'All responses are anonymised and never sold individually',
+                    'Compliant with Kenya Data Protection Act 2019',
+                    'Short surveys averaging 3 – 7 minutes to complete',
+                  ].map((point) => (
+                    <div key={point} className="flex items-start gap-2.5 text-sm text-slate-700">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">Consumer-First Research</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Our questionnaires are designed by professional researchers to capture genuine
+                    consumer experiences — not to promote any specific brand or product.
+                  </p>
+                </div>
+                <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">Private by Design</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Responses are aggregated at the group level before being shared with research
+                    clients. No individual response is ever identifiable or traceable to you personally.
+                  </p>
+                </div>
+                <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                    <BarChart3 className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">Real Impact in Kenya</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Research insights gathered through our panel have helped organisations improve mobile
+                    money services, supermarket delivery experiences, and internet access programmes
+                    across Kenya.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── SECTOR BAND ── */}
           <section className="brand-band">
             <div className="container brand-band-inner">
               <span>RESEARCH FOCUS AREAS</span>
@@ -1821,153 +1919,173 @@ function Index() {
             </p>
           </section>
 
-          {/* COMMUNITY PILLARS SECTION */}
-          <section className="section-space container" id="about-community">
-            <div className="section-heading">
-              <div>
-                <div className="section-kicker">CONSUMER PERSPECTIVES</div>
-                <h2>
-                  Real voices.
-                  <br />
-                  <em>Better everyday services.</em>
-                </h2>
-                <p>
-                  Share constructive feedback on the services and consumer goods you interact with every day in Kenya.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
-                  <Users className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Empowering Local Consumers</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Your feedback helps organizations evaluate customer service quality, billing transparency, and satisfaction across major consumer categories in Kenya.
-                </p>
-              </div>
-
-              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
-                  <BarChart3 className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Structured Opinion Polls</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Participate in quick, objective multiple-choice questionnaires that focus on product usability, internet reliability, and retail shopping preferences.
-                </p>
-              </div>
-
-              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Private & Confidential</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Responses are aggregated and anonymized for market research insights. In strict compliance with the Kenya Data Protection Act 2019, your identity is always protected.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* RESEARCH FOCUS AREAS */}
-          <section className="section-space container pt-0">
+          {/* ── RESEARCH TOPICS ── */}
+          <section className="section-space container pt-0" id="research-topics">
             <div className="section-heading">
               <div>
                 <div className="section-kicker">KEY SECTORS</div>
-                <h2>Explore Research Topics</h2>
-                <p>Learn about the key industries and consumer topics discussed by panel members.</p>
+                <h2>Consumer Research Topics in Kenya</h2>
+                <p>Explore the industry categories our panel members regularly provide feedback on.</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
-                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
-                  Technology & Telecom
-                </span>
-                <h4 className="text-base font-bold text-slate-900 mb-1.5">Digital Connectivity</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Technology & Telecom</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Mobile & Internet Services</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Evaluating mobile data speed, 4G/5G coverage, home fibre consistency, and mobile app performance across Kenyan towns.
+                  Panel members share experiences about mobile data speeds, 4G and 5G network
+                  reliability, home fibre broadband quality, call centre responsiveness, and the
+                  usability of telecom mobile apps across Nairobi, Mombasa, Kisumu, and other Kenyan
+                  counties.
                 </p>
               </div>
 
-              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
-                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
-                  Finance & Banking
-                </span>
-                <h4 className="text-base font-bold text-slate-900 mb-1.5">Mobile Banking & Payments</h4>
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Finance & Banking</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Digital Banking & Mobile Money</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Understanding digital banking adoption, cashless checkout trends, customer support responsiveness, and financial tools.
+                  Research topics include mobile banking app satisfaction, digital wallet adoption, loan
+                  accessibility for small businesses, bank branch customer service, and cashless payment
+                  experiences at supermarkets and petrol stations across Kenya.
                 </p>
               </div>
 
-              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
-                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
-                  Retail & Groceries
-                </span>
-                <h4 className="text-base font-bold text-slate-900 mb-1.5">Everyday Shopping Habits</h4>
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Retail & Groceries</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Supermarket & Shopping Habits</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Gathering household preferences regarding supermarket convenience, produce freshness, product availability, and loyalty offers.
+                  Surveys cover grocery shopping frequency, price sensitivity, brand loyalty in staple
+                  foods, fresh produce quality ratings, in-store navigation experience, and customer
+                  satisfaction with loyalty card programmes at major Kenyan supermarket chains.
                 </p>
               </div>
 
-              <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-xl">
-                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
-                  Travel & Mobility
-                </span>
-                <h4 className="text-base font-bold text-slate-900 mb-1.5">Transport & Logistics</h4>
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Transport & Mobility</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Urban Commute & Ride-Hailing</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Reviewing daily commute experiences, ride-hailing app accessibility, parcel delivery timelines, and passenger safety.
+                  Consumer opinions on matatu route reliability, ride-hailing app safety and pricing,
+                  traffic congestion experiences in Nairobi CBD, boda-boda regulation, and passenger
+                  preferences for last-mile delivery services.
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">E-Commerce & Delivery</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Online Shopping in Kenya</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Questionnaires explore online shopping trust levels, delivery speed satisfaction,
+                  returns process ease, product authenticity concerns, and reasons Kenyan shoppers
+                  choose online versus in-store purchasing across various product categories.
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Energy & Utilities</span>
+                <h4 className="text-base font-bold text-slate-900 mb-1.5">Power & Clean Energy Access</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Research on prepaid electricity token experiences, grid reliability in urban and
+                  peri-urban Kenya, solar energy adoption drivers and barriers, consumer attitudes toward
+                  renewable energy, and LPG versus charcoal cooking fuel preferences.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* HOW IT WORKS */}
+          {/* ── HOW IT WORKS ── */}
           <section className="how-section" id="how-it-works">
             <div className="container how-inner">
               <div className="how-intro">
-                <div className="section-kicker">SIMPLE & ACCESSIBLE</div>
+                <div className="section-kicker">SIMPLE & FREE</div>
                 <h2>
-                  Small moments.
+                  How Survey Pay
                   <br />
-                  <em>Big ideas.</em>
+                  <em>Kenya works.</em>
                 </h2>
-                <p>Participating in consumer opinion research is straightforward and takes just a few minutes.</p>
+                <p>Joining our consumer research panel takes less than two minutes. Here is what to expect after you register.</p>
                 <Button className="dark-button" onClick={start}>
                   Explore SurveyPay <ArrowUpRight />
                 </Button>
               </div>
               <div className="how-steps">
                 <div>
-                  <span>01 / JOIN</span>
-                  <h3>Create Your Profile</h3>
-                  <p>Register your free panel account to access questionnaires tailored to your region.</p>
+                  <span>01 / CREATE</span>
+                  <h3>Register a Free Account</h3>
+                  <p>Sign up with your email address and a basic profile. No payment card or personal ID required. Registration is free and takes under two minutes.</p>
                   <Search />
                 </div>
                 <div>
-                  <span>02 / PARTICIPATE</span>
-                  <h3>Answer Simple Questions</h3>
-                  <p>Share your honest perspectives through straightforward multiple-choice questions.</p>
-                  <CheckCircle2 />
+                  <span>02 / BROWSE</span>
+                  <h3>Pick a Survey Topic</h3>
+                  <p>Browse available questionnaires from the dashboard. Each survey shows its topic, industry category, and estimated completion time so you can choose what interests you.</p>
+                  <BarChart3 />
                 </div>
                 <div>
-                  <span>03 / IMPACT</span>
-                  <h3>Shape Consumer Trends</h3>
-                  <p>Help businesses understand real user feedback and improve local services across Kenya.</p>
-                  <Users />
+                  <span>03 / PARTICIPATE</span>
+                  <h3>Answer Simple Questions</h3>
+                  <p>Complete multiple-choice questions honestly based on your real experiences as a Kenyan consumer. Surveys typically take 3 to 7 minutes to finish.</p>
+                  <CheckCircle2 />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* BOTTOM CTA */}
+          {/* ── FAQ SECTION ── */}
+          <section className="section-space container" id="faq">
+            <div className="section-heading">
+              <div>
+                <div className="section-kicker">FREQUENTLY ASKED QUESTIONS</div>
+                <h2>Everything you need to know</h2>
+                <p>Common questions from new panel members in Kenya.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {[
+                {
+                  q: 'Is Survey Pay Kenya free to join?',
+                  a: 'Yes. Registration and participation are 100% free. You will never be asked to pay to access surveys or to join the panel. If any platform asks you to pay to receive survey invitations, that is not us.',
+                },
+                {
+                  q: 'Who can join the Survey Pay Kenya panel?',
+                  a: 'Any Kenyan resident aged 18 and above can register. We welcome participants from all 47 counties — both urban and rural areas — as diverse regional perspectives are valuable to our research clients.',
+                },
+                {
+                  q: 'How long does each survey take?',
+                  a: 'Most surveys on our platform are designed to take between 3 and 7 minutes. Each survey listing shows an estimated completion time before you begin, so you can plan accordingly.',
+                },
+                {
+                  q: 'Is my personal data safe?',
+                  a: 'Yes. Survey Pay Kenya operates in compliance with the Kenya Data Protection Act 2019. Your individual responses are aggregated and anonymised before being shared with research clients. We do not sell or share your personal contact details.',
+                },
+                {
+                  q: 'What kinds of surveys are available?',
+                  a: 'Our surveys cover a wide range of consumer topics relevant to daily life in Kenya: mobile network services, digital banking and mobile money, supermarket shopping habits, ride-hailing experiences, online shopping, and household energy usage.',
+                },
+                {
+                  q: 'How do organisations use my feedback?',
+                  a: 'Anonymised, aggregated research data is compiled into market research reports. Organisations use these reports to make strategic decisions about improving customer service, launching new products, and designing programmes that better serve Kenyan consumers.',
+                },
+              ].map(({ q, a }) => (
+                <div key={q} className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <h4 className="text-sm font-bold text-slate-900 mb-2">{q}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">{a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── BOTTOM CTA ── */}
           <section className="bottom-cta">
             <div className="container bottom-cta-inner">
               <div>
-                <div className="section-kicker">COMMUNITY PANEL</div>
-                <h2>Your perspective counts.</h2>
-                <p>Join thousands of Kenyans sharing insights on everyday products and services.</p>
+                <div className="section-kicker">JOIN THE PANEL TODAY</div>
+                <h2>Help shape better services for Kenya.</h2>
+                <p>
+                  Register your free account and start sharing your consumer opinions on the products and
+                  services you use every day. Your voice helps organisations build better solutions for all
+                  Kenyans.
+                </p>
               </div>
               <Button className="hero-primary" onClick={start}>
                 Join Free & Start Surveys <ArrowUpRight />

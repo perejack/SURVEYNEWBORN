@@ -77,13 +77,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Survey Pay Kenya — Consumer Research & Community Insights" },
-      { name: "description", content: "Join Kenyans sharing feedback on local products, services, and everyday consumer experiences. Shape better solutions through structured opinion research." },
+      { title: "Survey Pay Kenya — Online Consumer Surveys & Market Research Panel" },
+      {
+        name: "description",
+        content:
+          "Survey Pay Kenya is a free online market research panel connecting Kenyan consumers with businesses seeking honest product and service feedback. Join thousands sharing opinions on telecom, banking, retail, and more.",
+      },
+      {
+        name: "keywords",
+        content:
+          "online surveys Kenya, market research Kenya, consumer opinion panel Kenya, paid surveys Kenya, Kenyan survey site, feedback platform Kenya, earn through surveys Kenya",
+      },
       { name: "author", content: "Survey Pay Kenya" },
-      { property: "og:title", content: "Survey Pay Kenya — Consumer Research & Community Insights" },
-      { property: "og:description", content: "Join Kenyans sharing feedback on local products, services, and everyday consumer experiences. Shape better solutions through structured opinion research." },
+      { name: "robots", content: "index, follow" },
+      { name: "googlebot", content: "index, follow" },
+      { property: "og:title", content: "Survey Pay Kenya — Online Consumer Surveys & Market Research Panel" },
+      {
+        property: "og:description",
+        content:
+          "Join Kenya's independent consumer research community. Share feedback on local services, banking, retail, telecom and more. Free to join — your opinion matters.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://surveypay.co.ke" },
+      { property: "og:site_name", content: "Survey Pay Kenya" },
+      { property: "og:locale", content: "en_KE" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Survey Pay Kenya — Consumer Research Panel" },
+      {
+        name: "twitter:description",
+        content: "Join thousands of Kenyans sharing opinions on everyday products and services. Free to participate — your feedback shapes better services.",
+      },
     ],
     links: [
       {
@@ -91,6 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "canonical", href: "https://surveypay.co.ke" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" },
