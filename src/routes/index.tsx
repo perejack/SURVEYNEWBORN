@@ -45,10 +45,23 @@ import lifestyle from '@/assets/survey-lifestyle.jpg';
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Survey Pay Kenya — Consumer Research & Community Insights' },
-      { name: 'description', content: 'Participate in consumer surveys and community opinion panels across Kenya. Share feedback on everyday products, local services, and consumer experiences.' },
-      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research & Community Insights' },
-      { property: 'og:description', content: 'Participate in consumer surveys and community opinion panels across Kenya. Share feedback on everyday products and local services.' },
+      { title: 'Paid Surveys Kenya M-Pesa — Online Tasks for Students & Side Hustle' },
+      {
+        name: 'description',
+        content:
+          'Earn rewards per task with paid surveys Kenya M-Pesa. Flexible online tasks for students Kenya, the top side hustle Kenya M-Pesa, and smart alternative to part time jobs online kenya.',
+      },
+      {
+        name: 'keywords',
+        content:
+          'paid surveys Kenya M-Pesa, online tasks for students Kenya, side hustle Kenya M-Pesa, part time jobs online kenya, get rewarded per task, survey rewards M-Pesa',
+      },
+      { property: 'og:title', content: 'Paid Surveys Kenya M-Pesa — Online Tasks for Students & Side Hustle' },
+      {
+        property: 'og:description',
+        content:
+          'Complete simple online tasks and paid surveys in Kenya. Get rewarded per task directly to M-Pesa. Free registration.',
+      },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
@@ -1772,17 +1785,14 @@ function Index() {
           >
             <div className="container hero-content">
               <div className="hero-eyebrow">
-                <span className="hero-spark">🇰🇪</span> KENYA'S INDEPENDENT CONSUMER RESEARCH PANEL <span className="eyebrow-line" />
+                <span className="hero-spark">🇰🇪</span> PAID SURVEYS KENYA M-PESA · ONLINE TASKS & REWARDS <span className="eyebrow-line" />
               </div>
               <h1>
-                Your Opinion Shapes
-                <br />Kenya's Biggest Brands.
+                Get Rewarded for Taking Surveys.
+                <br />Real Opinions. Real M-Pesa Rewards.
               </h1>
               <p>
-                Survey Pay Kenya is a free online consumer research panel. Thousands of Kenyans complete
-                short multiple-choice questionnaires to help telecom companies, banks, supermarkets, and
-                retailers improve their everyday services. Registration is free, surveys are quick, and
-                your responses are always kept private and anonymous.
+                Welcome to Survey Pay Kenya — the leading platform for <strong>paid surveys Kenya M-Pesa</strong> and flexible <strong>online tasks for students Kenya</strong>. Complete short, multiple-choice questionnaires on everyday consumer services and <strong>get rewarded per task</strong> directly to your M-Pesa. It’s the ultimate flexible <strong>side hustle Kenya M-Pesa</strong> and a modern alternative to traditional <strong>part time jobs online kenya</strong>. Free to join with zero registration fees.
               </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
@@ -1802,62 +1812,165 @@ function Index() {
                   <b>A</b>
                   <b>K</b>
                 </span>
-                <span>Thousands of Kenyans already sharing their opinions every week</span>
+                <span>Thousands of Kenyans getting rewarded per task · Direct M-Pesa disbursements</span>
               </div>
             </div>
-            <div className="hero-side-label">FREE CONSUMER SURVEY PANEL · KENYA</div>
+            <div className="hero-side-label">PAID SURVEYS & ONLINE TASKS · KENYA</div>
           </section>
 
-          {/* ── TRUST STATS BAR ── */}
+          {/* ── TRUST & REWARDS STATS BAR ── */}
           <section className="bg-emerald-700 text-white py-6">
             <div className="container">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
                   <div className="text-2xl font-extrabold">10,000+</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Registered Panel Members</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Active Kenyan Panelists</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold">5 Min</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Average Survey Duration</div>
+                  <div className="text-2xl font-extrabold">Per Task</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Get Rewarded for Taking Surveys</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold">5+</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Active Research Categories</div>
+                  <div className="text-2xl font-extrabold">M-Pesa</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Fast Digital Rewards Disbursement</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold">100%</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Free to Join & Participate</div>
+                  <div className="text-2xl font-extrabold">100% Free</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Zero Registration Fees</div>
                 </div>
               </div>
             </div>
           </section>
 
+          {/* ── FEATURED OPPORTUNITIES: 4 TARGET PHRASES ── */}
+          <section className="section-space container" id="opportunities">
+            <div className="section-heading">
+              <div>
+                <div className="section-kicker">FLEXIBLE ONLINE TASKS & REWARDS</div>
+                <h2>Get Rewarded Per Task in Kenya</h2>
+                <p>
+                  Explore flexible online surveys and tasks you can complete from your phone or laptop. Get rewarded per task, build your balance, and redeem directly to M-Pesa.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 my-8">
+              {/* Card 1: paid surveys Kenya M-Pesa */}
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+                    <Smartphone className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">
+                    VERIFIED RESEARCH
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 mb-2">Paid surveys Kenya M-Pesa</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Participate in authenticated consumer research questionnaires from leading Kenyan businesses. Answer quick questions on mobile networks, banking apps, and shopping habits to <strong>get rewarded to M-Pesa</strong> after completing valid surveys.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
+                  <span>Fast M-Pesa redemption</span>
+                  <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+
+              {/* Card 2: online tasks for students Kenya */}
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-4">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-extrabold tracking-wider text-blue-700 uppercase block mb-1">
+                    CAMPUS & YOUTH
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 mb-2">Online tasks for students Kenya</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    A flexible solution for college and university students seeking convenient <strong>online tasks for students Kenya</strong>. No CV, specialized work experience, or expensive laptops needed — complete 5-minute opinion tasks on your phone between lectures.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-blue-700 flex items-center gap-1">
+                  <span>100% mobile friendly</span>
+                  <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+
+              {/* Card 3: side hustle Kenya M-Pesa */}
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center mb-4">
+                    <TrendingUp className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-extrabold tracking-wider text-amber-700 uppercase block mb-1">
+                    ZERO CAPITAL
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 mb-2">Side hustle Kenya M-Pesa</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Looking for a genuine <strong>side hustle Kenya M-Pesa</strong> that doesn’t require buying stock, selling products, or paying registration fees? Turn 10 to 15 minutes of spare time during commutes or evenings into verified survey rewards.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-amber-700 flex items-center gap-1">
+                  <span>Start with zero capital</span>
+                  <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+
+              {/* Card 4: part time jobs online kenya */}
+              <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center mb-4">
+                    <Clock3 className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-extrabold tracking-wider text-purple-700 uppercase block mb-1">
+                    TOTAL INDEPENDENCE
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 mb-2">Part time jobs online kenya</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    A flexible alternative to conventional <strong>part time jobs online kenya</strong> that force you into fixed shifts, stressful deadlines, and demanding supervisor contracts. You decide when to log in, which survey task to take, and how long to participate.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-purple-700 flex items-center gap-1">
+                  <span>Work on your own schedule</span>
+                  <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            </div>
+
+            {/* Reward Transparency Banner */}
+            <div className="p-4 bg-emerald-50/80 border border-emerald-200/80 rounded-xl flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-sm text-emerald-950 block font-bold">
+                  Transparent Rewards & Fair Research Participation Policy
+                </strong>
+                <p className="text-xs text-emerald-900/90 leading-relaxed mt-0.5">
+                  Survey Pay Kenya provides survey participation incentives to compensate respondents for their time, mobile data, and honest feedback. Rewards are credited upon the successful completion of authenticated research questionnaires. This platform offers market research incentives for supplemental income and does not promise fixed employment or investment returns.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* ── ABOUT / MISSION ── */}
-          <section className="section-space container" id="about-community">
+          <section className="section-space container pt-0" id="about-community">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="section-kicker">ABOUT SURVEY PAY KENYA</div>
                 <h2 className="text-3xl font-extrabold text-slate-900 leading-tight mt-2 mb-4">
-                  Kenya's trusted voice for consumer market research
+                  Kenya's trusted platform for consumer research & survey rewards
                 </h2>
                 <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                  Survey Pay Kenya is an independent online market research panel based in Nairobi,
-                  Kenya. We partner with organisations across telecommunications, banking, retail, and
-                  logistics who want to understand how Kenyan consumers experience their products and
-                  services in daily life.
+                  Survey Pay Kenya is an independent online market research panel based in Nairobi, Kenya. We connect forward-thinking organizations across telecommunications, banking, retail, and e-commerce with real Kenyan consumers who provide honest feedback on everyday services.
                 </p>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                  As a registered panel member you gain access to short, structured questionnaires on
-                  topics relevant to your everyday life in Kenya. Your anonymised responses contribute
-                  directly to research reports that help brands improve customer service, product design,
-                  and pricing transparency for millions of Kenyans.
+                  Panelists participate in short, structured questionnaires relevant to daily life in Kenya. In return for your valuable time and perspectives, you <strong>get rewarded per task</strong>, with straightforward withdrawal options directly to your Safaricom M-Pesa line once minimum milestones are reached.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[
-                    'Completely free to join — no hidden fees or charges',
-                    'All responses are anonymised and never sold individually',
-                    'Compliant with Kenya Data Protection Act 2019',
-                    'Short surveys averaging 3 – 7 minutes to complete',
+                    'Free registration with zero upfront joining fees',
+                    'Get rewarded per task completed with clear incentive tracking',
+                    'Direct M-Pesa mobile money rewards disbursement',
+                    'Short surveys averaging 3 to 7 minutes on your phone',
+                    '100% compliant with Kenya Data Protection Act 2019',
                   ].map((point) => (
                     <div key={point} className="flex items-start gap-2.5 text-sm text-slate-700">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
@@ -1873,8 +1986,7 @@ function Index() {
                   </div>
                   <h3 className="text-base font-bold text-slate-900 mb-1">Consumer-First Research</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Our questionnaires are designed by professional researchers to capture genuine
-                    consumer experiences — not to promote any specific brand or product.
+                    Our questionnaires are designed by professional researchers to capture genuine consumer experiences — not to sell products or push advertising.
                   </p>
                 </div>
                 <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
@@ -1883,19 +1995,16 @@ function Index() {
                   </div>
                   <h3 className="text-base font-bold text-slate-900 mb-1">Private by Design</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Responses are aggregated at the group level before being shared with research
-                    clients. No individual response is ever identifiable or traceable to you personally.
+                    Responses are aggregated at the group level before being shared with research clients. Your personal identity is protected at all times.
                   </p>
                 </div>
                 <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
                     <BarChart3 className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">Real Impact in Kenya</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">Real Impact Across Kenya</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Research insights gathered through our panel have helped organisations improve mobile
-                    money services, supermarket delivery experiences, and internet access programmes
-                    across Kenya.
+                    Research insights gathered through our panel help organizations improve mobile money apps, supermarket delivery services, and internet coverage nationwide.
                   </p>
                 </div>
               </div>
@@ -1925,7 +2034,7 @@ function Index() {
               <div>
                 <div className="section-kicker">KEY SECTORS</div>
                 <h2>Consumer Research Topics in Kenya</h2>
-                <p>Explore the industry categories our panel members regularly provide feedback on.</p>
+                <p>Explore the industry categories our panel members regularly provide feedback on to earn rewards.</p>
               </div>
             </div>
 
@@ -1934,10 +2043,7 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Technology & Telecom</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Mobile & Internet Services</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Panel members share experiences about mobile data speeds, 4G and 5G network
-                  reliability, home fibre broadband quality, call centre responsiveness, and the
-                  usability of telecom mobile apps across Nairobi, Mombasa, Kisumu, and other Kenyan
-                  counties.
+                  Panel members share experiences about mobile data speeds, 4G and 5G network reliability, home fibre broadband quality, customer care responsiveness, and mobile app performance across Kenyan towns.
                 </p>
               </div>
 
@@ -1945,9 +2051,7 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Finance & Banking</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Digital Banking & Mobile Money</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Research topics include mobile banking app satisfaction, digital wallet adoption, loan
-                  accessibility for small businesses, bank branch customer service, and cashless payment
-                  experiences at supermarkets and petrol stations across Kenya.
+                  Research topics include mobile banking app satisfaction, digital wallet adoption, loan accessibility for small enterprises, bank branch customer service, and cashless payment experiences across Kenya.
                 </p>
               </div>
 
@@ -1955,9 +2059,7 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Retail & Groceries</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Supermarket & Shopping Habits</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Surveys cover grocery shopping frequency, price sensitivity, brand loyalty in staple
-                  foods, fresh produce quality ratings, in-store navigation experience, and customer
-                  satisfaction with loyalty card programmes at major Kenyan supermarket chains.
+                  Surveys cover grocery shopping frequency, price sensitivity, brand loyalty in staple foods, fresh produce quality ratings, and customer satisfaction with loyalty card programmes at major supermarket chains.
                 </p>
               </div>
 
@@ -1965,9 +2067,7 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Transport & Mobility</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Urban Commute & Ride-Hailing</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Consumer opinions on matatu route reliability, ride-hailing app safety and pricing,
-                  traffic congestion experiences in Nairobi CBD, boda-boda regulation, and passenger
-                  preferences for last-mile delivery services.
+                  Consumer opinions on matatu route reliability, ride-hailing app safety and pricing, traffic congestion experiences in Nairobi CBD, boda-boda regulation, and passenger preferences for courier delivery services.
                 </p>
               </div>
 
@@ -1975,9 +2075,7 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">E-Commerce & Delivery</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Online Shopping in Kenya</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Questionnaires explore online shopping trust levels, delivery speed satisfaction,
-                  returns process ease, product authenticity concerns, and reasons Kenyan shoppers
-                  choose online versus in-store purchasing across various product categories.
+                  Questionnaires explore online shopping trust levels, delivery speed satisfaction, returns process ease, product authenticity concerns, and reasons Kenyan shoppers choose online versus physical stores.
                 </p>
               </div>
 
@@ -1985,86 +2083,100 @@ function Index() {
                 <span className="text-[10px] font-extrabold tracking-wider text-emerald-700 uppercase block mb-1">Energy & Utilities</span>
                 <h4 className="text-base font-bold text-slate-900 mb-1.5">Power & Clean Energy Access</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Research on prepaid electricity token experiences, grid reliability in urban and
-                  peri-urban Kenya, solar energy adoption drivers and barriers, consumer attitudes toward
-                  renewable energy, and LPG versus charcoal cooking fuel preferences.
+                  Research on prepaid electricity token experiences, grid reliability in urban and peri-urban Kenya, solar energy adoption drivers, and consumer preferences between LPG cooking gas and alternative fuels.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* ── HOW IT WORKS ── */}
+          {/* ── HOW IT WORKS: 4 STEPS ── */}
           <section className="how-section" id="how-it-works">
             <div className="container how-inner">
               <div className="how-intro">
-                <div className="section-kicker">SIMPLE & FREE</div>
+                <div className="section-kicker">SIMPLE & ACCESSIBLE</div>
                 <h2>
                   How Survey Pay
                   <br />
                   <em>Kenya works.</em>
                 </h2>
-                <p>Joining our consumer research panel takes less than two minutes. Here is what to expect after you register.</p>
+                <p>
+                  Start taking paid surveys and online tasks in four straightforward steps.
+                </p>
                 <Button className="dark-button" onClick={start}>
                   Explore SurveyPay <ArrowUpRight />
                 </Button>
               </div>
-              <div className="how-steps">
+              <div className="how-steps grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <span>01 / CREATE</span>
-                  <h3>Register a Free Account</h3>
-                  <p>Sign up with your email address and a basic profile. No payment card or personal ID required. Registration is free and takes under two minutes.</p>
+                  <span>01 / JOIN</span>
+                  <h3>Register Free Account</h3>
+                  <p>Sign up in under two minutes with your email and phone. No credit card or registration fee required.</p>
                   <Search />
                 </div>
                 <div>
-                  <span>02 / BROWSE</span>
-                  <h3>Pick a Survey Topic</h3>
-                  <p>Browse available questionnaires from the dashboard. Each survey shows its topic, industry category, and estimated completion time so you can choose what interests you.</p>
+                  <span>02 / SELECT</span>
+                  <h3>Pick a Survey Task</h3>
+                  <p>Browse available questionnaires from the dashboard. Each survey shows topic, category, and estimated time.</p>
                   <BarChart3 />
                 </div>
                 <div>
-                  <span>03 / PARTICIPATE</span>
-                  <h3>Answer Simple Questions</h3>
-                  <p>Complete multiple-choice questions honestly based on your real experiences as a Kenyan consumer. Surveys typically take 3 to 7 minutes to finish.</p>
+                  <span>03 / ANSWER</span>
+                  <h3>Share Honest Opinions</h3>
+                  <p>Answer multiple-choice questions based on your real consumer experiences. Takes just 3 to 7 minutes.</p>
                   <CheckCircle2 />
+                </div>
+                <div>
+                  <span>04 / REDEEM</span>
+                  <h3>Get Rewarded to M-Pesa</h3>
+                  <p>Get rewarded per task completed. Request fast disbursement straight to your Safaricom M-Pesa line.</p>
+                  <Smartphone />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* ── FAQ SECTION ── */}
+          {/* ── FAQ SECTION WITH KEY SEARCH INTENTS ── */}
           <section className="section-space container" id="faq">
             <div className="section-heading">
               <div>
                 <div className="section-kicker">FREQUENTLY ASKED QUESTIONS</div>
                 <h2>Everything you need to know</h2>
-                <p>Common questions from new panel members in Kenya.</p>
+                <p>Common questions about paid surveys, online tasks, and M-Pesa rewards in Kenya.</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {[
                 {
+                  q: 'How do paid surveys Kenya M-Pesa work on Survey Pay Kenya?',
+                  a: 'Once you create your free account, you can access research surveys across various Kenyan industries. You answer multiple-choice questions on brands and services, and get rewarded per task upon successful completion. Your earned reward balance can be redeemed directly to your Safaricom M-Pesa account.',
+                },
+                {
+                  q: 'Are these suitable online tasks for students Kenya?',
+                  a: 'Yes, absolutely! University and college students across Kenya frequently use Survey Pay Kenya because questionnaires take only 3 to 7 minutes and can be completed from any smartphone. It requires no technical qualification or resume, making it one of the most accessible online tasks for students Kenya.',
+                },
+                {
+                  q: 'Why is Survey Pay Kenya a popular side hustle Kenya M-Pesa?',
+                  a: 'Unlike traditional side hustles that require startup capital, buying stock, or renting a stall, Survey Pay Kenya has zero financial barriers. You participate on your mobile phone whenever you have spare time — such as during your commute, lunch break, or relaxing at home.',
+                },
+                {
+                  q: 'How does this compare to traditional part time jobs online kenya?',
+                  a: 'Standard part time jobs online kenya often demand fixed shifts, set working hours, and formal supervisor check-ins. Survey Pay Kenya is completely self-paced: you choose when to participate, which surveys to take, and there are no penalties for days you are busy with work or studies.',
+                },
+                {
+                  q: 'How do I get rewarded per task?',
+                  a: 'Each survey questionnaire displays its research topic, duration, and reward value before you begin. Once all questions are completed and pass our standard quality checks, the reward is credited to your account balance.',
+                },
+                {
                   q: 'Is Survey Pay Kenya free to join?',
-                  a: 'Yes. Registration and participation are 100% free. You will never be asked to pay to access surveys or to join the panel. If any platform asks you to pay to receive survey invitations, that is not us.',
+                  a: 'Yes, registration and survey participation are 100% free. You will never be asked to pay a fee to access surveys or join the panel. If any site claims to represent Survey Pay Kenya and asks for an upfront fee, do not pay them.',
                 },
                 {
-                  q: 'Who can join the Survey Pay Kenya panel?',
-                  a: 'Any Kenyan resident aged 18 and above can register. We welcome participants from all 47 counties — both urban and rural areas — as diverse regional perspectives are valuable to our research clients.',
+                  q: 'Is my personal data safe and protected?',
+                  a: 'Yes. Survey Pay Kenya strictly complies with the Kenya Data Protection Act 2019. Your individual survey responses are completely anonymized and aggregated with other respondents before being shared with research clients. We never sell your personal contact information.',
                 },
                 {
-                  q: 'How long does each survey take?',
-                  a: 'Most surveys on our platform are designed to take between 3 and 7 minutes. Each survey listing shows an estimated completion time before you begin, so you can plan accordingly.',
-                },
-                {
-                  q: 'Is my personal data safe?',
-                  a: 'Yes. Survey Pay Kenya operates in compliance with the Kenya Data Protection Act 2019. Your individual responses are aggregated and anonymised before being shared with research clients. We do not sell or share your personal contact details.',
-                },
-                {
-                  q: 'What kinds of surveys are available?',
-                  a: 'Our surveys cover a wide range of consumer topics relevant to daily life in Kenya: mobile network services, digital banking and mobile money, supermarket shopping habits, ride-hailing experiences, online shopping, and household energy usage.',
-                },
-                {
-                  q: 'How do organisations use my feedback?',
-                  a: 'Anonymised, aggregated research data is compiled into market research reports. Organisations use these reports to make strategic decisions about improving customer service, launching new products, and designing programmes that better serve Kenyan consumers.',
+                  q: 'How quickly are survey rewards disbursed to M-Pesa?',
+                  a: 'Once you reach the standard redemption threshold, you can submit a withdrawal request. Disbursements are processed directly to your registered Safaricom M-Pesa mobile phone number.',
                 },
               ].map(({ q, a }) => (
                 <div key={q} className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
@@ -2079,12 +2191,10 @@ function Index() {
           <section className="bottom-cta">
             <div className="container bottom-cta-inner">
               <div>
-                <div className="section-kicker">JOIN THE PANEL TODAY</div>
-                <h2>Help shape better services for Kenya.</h2>
+                <div className="section-kicker">START EARNING SURVEY REWARDS</div>
+                <h2>Ready to start paid surveys in Kenya?</h2>
                 <p>
-                  Register your free account and start sharing your consumer opinions on the products and
-                  services you use every day. Your voice helps organisations build better solutions for all
-                  Kenyans.
+                  Join thousands of Kenyans getting rewarded per task. Share your opinions on top consumer services, build your balance, and redeem rewards directly to M-Pesa today.
                 </p>
               </div>
               <Button className="hero-primary" onClick={start}>

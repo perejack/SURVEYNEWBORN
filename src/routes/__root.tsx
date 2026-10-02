@@ -77,35 +77,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Survey Pay Kenya — Online Consumer Surveys & Market Research Panel" },
+      { title: "Paid Surveys Kenya M-Pesa — Online Tasks & Side Hustle | Survey Pay Kenya" },
       {
         name: "description",
         content:
-          "Survey Pay Kenya is a free online market research panel connecting Kenyan consumers with businesses seeking honest product and service feedback. Join thousands sharing opinions on telecom, banking, retail, and more.",
+          "Looking for paid surveys Kenya M-Pesa? Complete simple online tasks for students Kenya and earn rewards per task. The ultimate flexible side hustle Kenya M-Pesa and smart alternative to part time jobs online kenya.",
       },
       {
         name: "keywords",
         content:
-          "online surveys Kenya, market research Kenya, consumer opinion panel Kenya, paid surveys Kenya, Kenyan survey site, feedback platform Kenya, earn through surveys Kenya",
+          "paid surveys Kenya M-Pesa, online tasks for students Kenya, side hustle Kenya M-Pesa, part time jobs online kenya, earn money online Kenya, survey rewards Kenya, M-Pesa surveys, micro tasks Kenya, online research panel Kenya",
       },
       { name: "author", content: "Survey Pay Kenya" },
       { name: "robots", content: "index, follow" },
       { name: "googlebot", content: "index, follow" },
-      { property: "og:title", content: "Survey Pay Kenya — Online Consumer Surveys & Market Research Panel" },
+      { property: "og:title", content: "Paid Surveys Kenya M-Pesa — Online Tasks & Side Hustle | Survey Pay Kenya" },
       {
         property: "og:description",
         content:
-          "Join Kenya's independent consumer research community. Share feedback on local services, banking, retail, telecom and more. Free to join — your opinion matters.",
+          "Complete online tasks for students Kenya, participate in paid surveys Kenya M-Pesa, and enjoy a flexible side hustle Kenya M-Pesa. Free registration, get rewarded per task.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://surveypay.co.ke" },
       { property: "og:site_name", content: "Survey Pay Kenya" },
       { property: "og:locale", content: "en_KE" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Survey Pay Kenya — Consumer Research Panel" },
+      { name: "twitter:title", content: "Paid Surveys Kenya M-Pesa & Online Tasks | Survey Pay Kenya" },
       {
         name: "twitter:description",
-        content: "Join thousands of Kenyans sharing opinions on everyday products and services. Free to participate — your feedback shapes better services.",
+        content: "Get rewarded per task with paid surveys Kenya M-Pesa. Flexible online tasks for students and the best side hustle Kenya M-Pesa.",
       },
     ],
     links: [
