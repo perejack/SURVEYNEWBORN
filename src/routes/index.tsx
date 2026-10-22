@@ -45,22 +45,22 @@ import lifestyle from '@/assets/survey-lifestyle.jpg';
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Survey Pay Kenya — Consumer Research Panel | M-Pesa Incentives' },
+      { title: 'Survey Pay Kenya — Paid Surveys & Online Tasks to M-Pesa' },
       {
         name: 'description',
         content:
-          'Survey Pay Kenya is a free consumer research panel. Complete short surveys on Kenyan brands and earn participation incentives redeemable to M-Pesa. Free to join. Earnings vary by availability.',
+          'Survey Pay Kenya connects you with paid surveys and online tasks. Share your opinions on Kenyan brands, complete quick surveys, and earn rewards directly to M-Pesa. Free registration.',
       },
       {
         name: 'keywords',
         content:
-          'paid surveys Kenya, consumer research panel Kenya, survey incentives M-Pesa, online surveys Kenya, earn M-Pesa Kenya, survey tasks Kenya students',
+          'paid surveys Kenya, paid surveys M-Pesa, online tasks for students Kenya, side hustle Kenya, earn rewards Kenya, survey pay Kenya',
       },
-      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research Panel | M-Pesa Incentives' },
+      { property: 'og:title', content: 'Survey Pay Kenya — Paid Surveys & Online Tasks to M-Pesa' },
       {
         property: 'og:description',
         content:
-          'Join Survey Pay Kenya, a free consumer research panel. Share opinions on everyday Kenyan services and earn survey incentives redeemable to M-Pesa. No fees. Earnings vary.',
+          'Share your opinion on everyday Kenyan brands and earn rewards directly to M-Pesa. 100% free registration.',
       },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
@@ -1792,11 +1792,11 @@ function Index() {
                 <br />Earn Survey Incentives to M-Pesa.
               </h1>
               <p>
-                Survey Pay Kenya is a consumer research panel connecting Kenyan residents with <strong>paid survey studies</strong>. Complete short, multiple-choice questionnaires on everyday services — mobile banking, shopping, telecoms — and earn <strong>survey incentives redeemable to M-Pesa</strong>. A free, flexible option for <strong>students</strong>, professionals, and anyone with a few spare minutes. No registration fee. No hidden charges.
+                Survey Pay Kenya connects Kenyan residents with <strong>paid survey opportunities</strong>. Complete short questionnaires on everyday services — mobile banking, shopping, telecoms — and <strong>earn rewards to your M-Pesa</strong>. Free to join, no registration fees, flexible schedule. Perfect for students, professionals, and anyone looking for a smart way to earn on the go.
               </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
-                  Join Free — No Fees <ArrowUpRight />
+                  Get Started Free <ArrowUpRight />
                 </Button>
                 <Button
                   className="hero-text"
@@ -1849,7 +1849,7 @@ function Index() {
                 <div className="section-kicker">CONSUMER RESEARCH & SURVEYS</div>
                 <h2>Earn Survey Incentives in Kenya</h2>
                 <p>
-                  Explore consumer research surveys you can complete on your phone or laptop. Earn participation incentives, build your reward balance, and redeem to M-Pesa once the minimum threshold is met.
+                  Explore surveys you can complete on your phone or laptop. Earn rewards per task, build your balance, and redeem directly to M-Pesa. Free to join, no upfront fees.
                 </p>
               </div>
             </div>
@@ -1941,10 +1941,10 @@ function Index() {
               <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-sm text-emerald-950 block font-bold">
-                  Transparent Rewards & Fair Research Participation Policy
+                  Free to Join · Earn Rewards · Withdraw to M-Pesa
                 </strong>
                 <p className="text-xs text-emerald-900/90 leading-relaxed mt-0.5">
-                  Survey Pay Kenya provides participation incentives to compensate panelists for their time and honest feedback. Incentives are credited upon completing eligible research questionnaires subject to quality checks. Survey incentives represent supplemental pocket income only — earnings vary by availability and no fixed income, employment, or investment returns are guaranteed.
+                  Survey Pay Kenya rewards you for sharing honest consumer opinions. Complete a questionnaire and earn rewards credited to your account balance, ready to withdraw to M-Pesa. Registration is always free — no upfront fees, no hidden charges.
                 </p>
               </div>
             </div>
@@ -1962,12 +1962,12 @@ function Index() {
                   Survey Pay Kenya is an independent online market research panel based in Nairobi, Kenya. We connect forward-thinking organizations across telecommunications, banking, retail, and e-commerce with real Kenyan consumers who provide honest feedback on everyday services.
                 </p>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                  Panelists participate in short, structured questionnaires relevant to daily life in Kenya. In return for your valuable time and perspectives, you <strong>earn participation incentives</strong>, with straightforward redemption options to your Safaricom M-Pesa line once the minimum balance threshold is reached.
+                  Panelists participate in short, structured questionnaires relevant to daily life in Kenya. In return for your valuable time and perspectives, you <strong>earn rewards per task</strong>, which you can withdraw directly to your Safaricom M-Pesa line once the minimum balance is reached.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[
                     'Free registration with zero upfront joining fees',
-                    'Earn survey incentives with transparent in-dashboard tracking',
+                    'Earn rewards per task with clear in-dashboard tracking',
                     'Direct M-Pesa mobile money rewards disbursement',
                     'Short surveys averaging 3 to 7 minutes on your phone',
                     '100% compliant with Kenya Data Protection Act 2019',
@@ -2128,7 +2128,7 @@ function Index() {
                 <div>
                   <span>04 / REDEEM</span>
                   <h3>Redeem Incentives to M-Pesa</h3>
-                  <p>Once your balance reaches the redemption threshold, request a disbursement straight to your Safaricom M-Pesa line.</p>
+                  <p>Earn rewards per task and withdraw straight to your Safaricom M-Pesa line once your balance reaches the minimum.</p>
                   <Smartphone />
                 </div>
               </div>
@@ -2148,7 +2148,7 @@ function Index() {
               {[
                 {
                   q: 'How do paid surveys Kenya M-Pesa work on Survey Pay Kenya?',
-                  a: 'Once you create your free account, you can access research surveys across various Kenyan industries. You answer multiple-choice questions on brands and services, and earn a participation incentive upon successful completion. Your incentive balance can be redeemed to your Safaricom M-Pesa account once the minimum threshold is met.',
+                  a: 'Once you create your free account, you can access surveys across various Kenyan industries. You answer simple questions about everyday brands, and earn rewards for each survey you complete. Your balance can be withdrawn directly to your Safaricom M-Pesa account.',
                 },
                 {
                   q: 'Are these suitable online tasks for students Kenya?',
@@ -2164,7 +2164,7 @@ function Index() {
                 },
                 {
                   q: 'How are survey incentives credited to my account?',
-                  a: 'Each questionnaire shows its topic, estimated duration, and incentive value before you start. Once questions are completed and pass quality checks, the incentive is credited to your account balance. You can redeem once the minimum withdrawal threshold is met.',
+                  a: 'Each survey shows its topic, estimated time, and reward value before you start. Once you complete all questions and pass quality checks, the reward is credited to your account balance. You can then withdraw to M-Pesa when you reach the minimum balance.',
                 },
                 {
                   q: 'Is Survey Pay Kenya free to join?',
@@ -2188,33 +2188,18 @@ function Index() {
           </section>
 
 
-          {/* ── EARNINGS DISCLAIMER ── */}
-          <section className="section-space container pt-0">
-            <div className="p-5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <strong className="text-sm text-amber-900 block font-bold mb-1">
-                  Earnings Disclaimer &amp; Participation Notice
-                </strong>
-                <p className="text-xs text-amber-800 leading-relaxed">
-                  Survey Pay Kenya is a consumer research panel — not an employment platform. Survey incentives are supplemental pocket income and vary based on survey availability, your demographic profile, and time invested. We do not guarantee a fixed daily, weekly, or monthly income. Incentive values and withdrawal thresholds are displayed clearly in your dashboard before you participate. Participation in all studies is 100% voluntary and free of charge.
-                </p>
-              </div>
-            </div>
-          </section>
-
           {/* ── BOTTOM CTA ── */}
           <section className="bottom-cta">
             <div className="container bottom-cta-inner">
               <div>
-                <div className="section-kicker">FREE REGISTRATION · KENYAN RESEARCH PANEL</div>
-                <h2>Ready to join Kenya’s consumer research panel?</h2>
+                <div className="section-kicker">FREE REGISTRATION · GET STARTED TODAY</div>
+                <h2>Ready to start earning survey rewards in Kenya?</h2>
                 <p>
-                  Share your honest opinions on everyday Kenyan services. Earn survey incentives credited to your account and redeemable directly to M-Pesa. Participation is 100% voluntary, free, and flexible.
+                  Complete short surveys on everyday Kenyan services, earn rewards to your account, and withdraw directly to M-Pesa. Free to join, flexible schedule, no fees required.
                 </p>
               </div>
               <Button className="hero-primary" onClick={start}>
-                Join Free & Start Participating <ArrowUpRight />
+                Start Earning to M-Pesa <ArrowUpRight />
               </Button>
             </div>
           </section>
