@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus } from '@/lib/auth';
+import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus, getLocalUser } from '@/lib/auth';
 import { initiateSTK, pollSTKStatus } from '@/lib/mpesa';
 import type { User } from '@supabase/supabase-js';
 import {
@@ -1210,10 +1210,19 @@ function Index() {
     let mounted = true;
     const loadSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user && mounted) {
-          setCurrentUser(session.user);
-          const profile = await getProfile(session.user.id);
+        let user: User | null = null;
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          user = session?.user ?? null;
+        } catch {}
+
+        if (!user) {
+          user = getLocalUser();
+        }
+
+        if (user && mounted) {
+          setCurrentUser(user);
+          const profile = await getProfile(user.id);
           if (profile && mounted) {
             if (profile.phone) setPhone(profile.phone);
             if (profile.plan) setPlan(profile.plan);
@@ -1223,29 +1232,36 @@ function Index() {
           }
         }
       } catch (e) {
-        console.error('Session load error:', e);
+        console.warn('Session load warning:', e);
       } finally {
         if (mounted) setAuthLoading(false);
       }
     };
     loadSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!mounted) return;
-      if (session?.user) {
-        setCurrentUser(session.user);
-        const profile = await getProfile(session.user.id);
-        if (profile && mounted) {
-          if (profile.phone) setPhone(profile.phone);
-          if (profile.plan) setPlan(profile.plan);
-          if (profile.completed_surveys?.length) setCompleted(profile.completed_surveys);
-          if (profile.unlocked_survey_ids?.length) setUnlockedSurveyIds(profile.unlocked_survey_ids);
-          if (profile.activated !== undefined) setActivated(profile.activated);
+    let authSub: { unsubscribe: () => void } | null = null;
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        if (!mounted) return;
+        if (session?.user) {
+          setCurrentUser(session.user);
+          const profile = await getProfile(session.user.id);
+          if (profile && mounted) {
+            if (profile.phone) setPhone(profile.phone);
+            if (profile.plan) setPlan(profile.plan);
+            if (profile.completed_surveys?.length) setCompleted(profile.completed_surveys);
+            if (profile.unlocked_survey_ids?.length) setUnlockedSurveyIds(profile.unlocked_survey_ids);
+            if (profile.activated !== undefined) setActivated(profile.activated);
+          }
+        } else {
+          const local = getLocalUser();
+          if (!local) {
+            setCurrentUser(null);
+          }
         }
-      } else {
-        setCurrentUser(null);
-      }
-    });
+      });
+      authSub = subscription;
+    } catch {}
 
     // Support accessing signup / login via route query parameter (e.g. /?auth=signup or /?signup=true)
     if (typeof window !== 'undefined') {
@@ -1264,7 +1280,7 @@ function Index() {
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
+      authSub?.unsubscribe();
     };
   }, []);
 
