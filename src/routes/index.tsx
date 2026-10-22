@@ -45,22 +45,22 @@ import lifestyle from '@/assets/survey-lifestyle.jpg';
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Paid Surveys Kenya M-Pesa — Online Tasks for Students & Side Hustle' },
+      { title: 'Survey Pay Kenya — Consumer Research Panel | M-Pesa Incentives' },
       {
         name: 'description',
         content:
-          'Earn rewards per task with paid surveys Kenya M-Pesa. Flexible online tasks for students Kenya, the top side hustle Kenya M-Pesa, and smart alternative to part time jobs online kenya.',
+          'Survey Pay Kenya is a free consumer research panel. Complete short surveys on Kenyan brands and earn participation incentives redeemable to M-Pesa. Free to join. Earnings vary by availability.',
       },
       {
         name: 'keywords',
         content:
-          'paid surveys Kenya M-Pesa, online tasks for students Kenya, side hustle Kenya M-Pesa, part time jobs online kenya, get rewarded per task, survey rewards M-Pesa',
+          'paid surveys Kenya, consumer research panel Kenya, survey incentives M-Pesa, online surveys Kenya, earn M-Pesa Kenya, survey tasks Kenya students',
       },
-      { property: 'og:title', content: 'Paid Surveys Kenya M-Pesa — Online Tasks for Students & Side Hustle' },
+      { property: 'og:title', content: 'Survey Pay Kenya — Consumer Research Panel | M-Pesa Incentives' },
       {
         property: 'og:description',
         content:
-          'Complete simple online tasks and paid surveys in Kenya. Get rewarded per task directly to M-Pesa. Free registration.',
+          'Join Survey Pay Kenya, a free consumer research panel. Share opinions on everyday Kenyan services and earn survey incentives redeemable to M-Pesa. No fees. Earnings vary.',
       },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
@@ -1788,15 +1788,15 @@ function Index() {
                 <span className="hero-spark">🇰🇪</span> PAID SURVEYS KENYA M-PESA · ONLINE TASKS & REWARDS <span className="eyebrow-line" />
               </div>
               <h1>
-                Get Rewarded for Taking Surveys.
-                <br />Real Opinions. Real M-Pesa Rewards.
+                Share Your Opinion.
+                <br />Earn Survey Incentives to M-Pesa.
               </h1>
               <p>
-                Welcome to Survey Pay Kenya — the leading platform for <strong>paid surveys Kenya M-Pesa</strong> and flexible <strong>online tasks for students Kenya</strong>. Complete short, multiple-choice questionnaires on everyday consumer services and <strong>get rewarded per task</strong> directly to your M-Pesa. It’s the ultimate flexible <strong>side hustle Kenya M-Pesa</strong> and a modern alternative to traditional <strong>part time jobs online kenya</strong>. Free to join with zero registration fees.
+                Survey Pay Kenya is a consumer research panel connecting Kenyan residents with <strong>paid survey studies</strong>. Complete short, multiple-choice questionnaires on everyday services — mobile banking, shopping, telecoms — and earn <strong>survey incentives redeemable to M-Pesa</strong>. A free, flexible option for <strong>students</strong>, professionals, and anyone with a few spare minutes. No registration fee. No hidden charges.
               </p>
               <div className="hero-actions">
                 <Button className="hero-primary" onClick={start}>
-                  Get Started Free <ArrowUpRight />
+                  Join Free — No Fees <ArrowUpRight />
                 </Button>
                 <Button
                   className="hero-text"
@@ -1812,10 +1812,10 @@ function Index() {
                   <b>A</b>
                   <b>K</b>
                 </span>
-                <span>Thousands of Kenyans getting rewarded per task · Direct M-Pesa disbursements</span>
+                <span>Kenyan panelists sharing consumer opinions · Survey incentives via M-Pesa</span>
               </div>
             </div>
-            <div className="hero-side-label">PAID SURVEYS & ONLINE TASKS · KENYA</div>
+            <div className="hero-side-label">CONSUMER RESEARCH PANEL · KENYA</div>
           </section>
 
           {/* ── TRUST & REWARDS STATS BAR ── */}
@@ -1823,12 +1823,12 @@ function Index() {
             <div className="container">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                  <div className="text-2xl font-extrabold">10,000+</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Active Kenyan Panelists</div>
+                  <div className="text-2xl font-extrabold">Kenyan</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Consumer Research Panel</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold">Per Task</div>
-                  <div className="text-xs text-emerald-200 mt-0.5">Get Rewarded for Taking Surveys</div>
+                  <div className="text-2xl font-extrabold">3–7 Min</div>
+                  <div className="text-xs text-emerald-200 mt-0.5">Average Survey Duration</div>
                 </div>
                 <div>
                   <div className="text-2xl font-extrabold">M-Pesa</div>
@@ -1846,10 +1846,10 @@ function Index() {
           <section className="section-space container" id="opportunities">
             <div className="section-heading">
               <div>
-                <div className="section-kicker">FLEXIBLE ONLINE TASKS & REWARDS</div>
-                <h2>Get Rewarded Per Task in Kenya</h2>
+                <div className="section-kicker">CONSUMER RESEARCH & SURVEYS</div>
+                <h2>Earn Survey Incentives in Kenya</h2>
                 <p>
-                  Explore flexible online surveys and tasks you can complete from your phone or laptop. Get rewarded per task, build your balance, and redeem directly to M-Pesa.
+                  Explore consumer research surveys you can complete on your phone or laptop. Earn participation incentives, build your reward balance, and redeem to M-Pesa once the minimum threshold is met.
                 </p>
               </div>
             </div>
@@ -1870,7 +1870,7 @@ function Index() {
                   </p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
-                  <span>Fast M-Pesa redemption</span>
+                  <span>Incentive redeemable to M-Pesa</span>
                   <ArrowRight className="w-3 h-3" />
                 </div>
               </div>
@@ -1944,7 +1944,7 @@ function Index() {
                   Transparent Rewards & Fair Research Participation Policy
                 </strong>
                 <p className="text-xs text-emerald-900/90 leading-relaxed mt-0.5">
-                  Survey Pay Kenya provides survey participation incentives to compensate respondents for their time, mobile data, and honest feedback. Rewards are credited upon the successful completion of authenticated research questionnaires. This platform offers market research incentives for supplemental income and does not promise fixed employment or investment returns.
+                  Survey Pay Kenya provides participation incentives to compensate panelists for their time and honest feedback. Incentives are credited upon completing eligible research questionnaires subject to quality checks. Survey incentives represent supplemental pocket income only — earnings vary by availability and no fixed income, employment, or investment returns are guaranteed.
                 </p>
               </div>
             </div>
@@ -1962,12 +1962,12 @@ function Index() {
                   Survey Pay Kenya is an independent online market research panel based in Nairobi, Kenya. We connect forward-thinking organizations across telecommunications, banking, retail, and e-commerce with real Kenyan consumers who provide honest feedback on everyday services.
                 </p>
                 <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                  Panelists participate in short, structured questionnaires relevant to daily life in Kenya. In return for your valuable time and perspectives, you <strong>get rewarded per task</strong>, with straightforward withdrawal options directly to your Safaricom M-Pesa line once minimum milestones are reached.
+                  Panelists participate in short, structured questionnaires relevant to daily life in Kenya. In return for your valuable time and perspectives, you <strong>earn participation incentives</strong>, with straightforward redemption options to your Safaricom M-Pesa line once the minimum balance threshold is reached.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[
                     'Free registration with zero upfront joining fees',
-                    'Get rewarded per task completed with clear incentive tracking',
+                    'Earn survey incentives with transparent in-dashboard tracking',
                     'Direct M-Pesa mobile money rewards disbursement',
                     'Short surveys averaging 3 to 7 minutes on your phone',
                     '100% compliant with Kenya Data Protection Act 2019',
@@ -2127,8 +2127,8 @@ function Index() {
                 </div>
                 <div>
                   <span>04 / REDEEM</span>
-                  <h3>Get Rewarded to M-Pesa</h3>
-                  <p>Get rewarded per task completed. Request fast disbursement straight to your Safaricom M-Pesa line.</p>
+                  <h3>Redeem Incentives to M-Pesa</h3>
+                  <p>Once your balance reaches the redemption threshold, request a disbursement straight to your Safaricom M-Pesa line.</p>
                   <Smartphone />
                 </div>
               </div>
@@ -2148,7 +2148,7 @@ function Index() {
               {[
                 {
                   q: 'How do paid surveys Kenya M-Pesa work on Survey Pay Kenya?',
-                  a: 'Once you create your free account, you can access research surveys across various Kenyan industries. You answer multiple-choice questions on brands and services, and get rewarded per task upon successful completion. Your earned reward balance can be redeemed directly to your Safaricom M-Pesa account.',
+                  a: 'Once you create your free account, you can access research surveys across various Kenyan industries. You answer multiple-choice questions on brands and services, and earn a participation incentive upon successful completion. Your incentive balance can be redeemed to your Safaricom M-Pesa account once the minimum threshold is met.',
                 },
                 {
                   q: 'Are these suitable online tasks for students Kenya?',
@@ -2163,8 +2163,8 @@ function Index() {
                   a: 'Standard part time jobs online kenya often demand fixed shifts, set working hours, and formal supervisor check-ins. Survey Pay Kenya is completely self-paced: you choose when to participate, which surveys to take, and there are no penalties for days you are busy with work or studies.',
                 },
                 {
-                  q: 'How do I get rewarded per task?',
-                  a: 'Each survey questionnaire displays its research topic, duration, and reward value before you begin. Once all questions are completed and pass our standard quality checks, the reward is credited to your account balance.',
+                  q: 'How are survey incentives credited to my account?',
+                  a: 'Each questionnaire shows its topic, estimated duration, and incentive value before you start. Once questions are completed and pass quality checks, the incentive is credited to your account balance. You can redeem once the minimum withdrawal threshold is met.',
                 },
                 {
                   q: 'Is Survey Pay Kenya free to join?',
@@ -2187,18 +2187,34 @@ function Index() {
             </div>
           </section>
 
+
+          {/* ── EARNINGS DISCLAIMER ── */}
+          <section className="section-space container pt-0">
+            <div className="p-5 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-sm text-amber-900 block font-bold mb-1">
+                  Earnings Disclaimer &amp; Participation Notice
+                </strong>
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  Survey Pay Kenya is a consumer research panel — not an employment platform. Survey incentives are supplemental pocket income and vary based on survey availability, your demographic profile, and time invested. We do not guarantee a fixed daily, weekly, or monthly income. Incentive values and withdrawal thresholds are displayed clearly in your dashboard before you participate. Participation in all studies is 100% voluntary and free of charge.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* ── BOTTOM CTA ── */}
           <section className="bottom-cta">
             <div className="container bottom-cta-inner">
               <div>
-                <div className="section-kicker">START EARNING SURVEY REWARDS</div>
-                <h2>Ready to start paid surveys in Kenya?</h2>
+                <div className="section-kicker">FREE REGISTRATION · KENYAN RESEARCH PANEL</div>
+                <h2>Ready to join Kenya’s consumer research panel?</h2>
                 <p>
-                  Join thousands of Kenyans getting rewarded per task. Share your opinions on top consumer services, build your balance, and redeem rewards directly to M-Pesa today.
+                  Share your honest opinions on everyday Kenyan services. Earn survey incentives credited to your account and redeemable directly to M-Pesa. Participation is 100% voluntary, free, and flexible.
                 </p>
               </div>
               <Button className="hero-primary" onClick={start}>
-                Join Free & Start Surveys <ArrowUpRight />
+                Join Free & Start Participating <ArrowUpRight />
               </Button>
             </div>
           </section>
