@@ -32,11 +32,12 @@ function createSupabaseClient() {
   const SUPABASE_URL =
     import.meta.env['VITE_SUPABASE_URL'] ||
     process.env['SUPABASE_URL'] ||
-    'https://nplwoopouwvgpwbmkint.supabase.co';
+    'https://ugfoapreveoacgdorctw.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY =
     import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] ||
+    import.meta.env['VITE_SUPABASE_ANON_KEY'] ||
     process.env['SUPABASE_PUBLISHABLE_KEY'] ||
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wbHdvb3BvdXd2Z3B3Ym1raW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NjE0ODQsImV4cCI6MjEwNjEzNzQ4NH0.V8mYiZ1yy4qp5vJH3t9PDp42T2spZP2gPWpnTXGiz8o';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZm9hcHJldmVvYWNnZG9yY3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MTI4MDQsImV4cCI6MjEwODI4ODgwNH0.evTgPf6DdJVDYMzUP9BYiOyuj18NMtBkP5Qz91cPc94';
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     global: {

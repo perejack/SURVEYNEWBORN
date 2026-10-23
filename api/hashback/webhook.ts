@@ -39,11 +39,11 @@ export default async function handler(req: any, res: any) {
   const supabaseUrl =
     process.env.SUPABASE_URL ||
     process.env.VITE_SUPABASE_URL ||
-    "https://nplwoopouwvgpwbmkint.supabase.co";
+    "https://ugfoapreveoacgdorctw.supabase.co";
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_ANON_KEY ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wbHdvb3BvdXd2Z3B3Ym1raW50Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MDU2MTQ4NCwiZXhwIjoyMTA2MTM3NDg0fQ.YQquS6sz5QVv0pSKMqqYqYO6qze_Bgq5AEI0aUqidY0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZm9hcHJldmVvYWNnZG9yY3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MTI4MDQsImV4cCI6MjEwODI4ODgwNH0.evTgPf6DdJVDYMzUP9BYiOyuj18NMtBkP5Qz91cPc94";
 
   if (supabaseUrl && supabaseKey && isSuccess && checkoutRequestId) {
     try {
