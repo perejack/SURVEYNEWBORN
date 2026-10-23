@@ -73,7 +73,7 @@ export const Route = createFileRoute('/')({
 });
 
 type View = 'landing' | 'home' | 'surveys' | 'wallet' | 'referrals' | 'profile';
-type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'withdraw_upsell' | 'withdraw_cooldown' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
+type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'withdraw_upsell' | 'withdraw_cooldown' | 'booster' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
 
 interface Question {
   question: string;
@@ -889,6 +889,16 @@ const upgradePackages = [
   },
 ];
 
+// ─── EARNINGS BOOSTER PACKAGES ───
+const boosterPackages = [
+  { name: 'Bronze', emoji: '🥉', price: 500, dailyEarn: 50, duration: 30, total: 1500, color: '#CD7F32', gradient: 'linear-gradient(135deg, #CD7F32, #A0522D)' },
+  { name: 'Silver', emoji: '🥈', price: 1000, dailyEarn: 120, duration: 30, total: 3600, color: '#9CA3AF', gradient: 'linear-gradient(135deg, #9CA3AF, #6B7280)', badge: 'POPULAR' },
+  { name: 'Gold', emoji: '🥇', price: 2000, dailyEarn: 280, duration: 30, total: 8400, color: '#F59E0B', gradient: 'linear-gradient(135deg, #F59E0B, #D97706)', badge: 'BEST ROI' },
+];
+
+// ─── DAILY CHECK-IN STREAK BONUSES ───
+const STREAK_BONUSES = [30, 40, 50, 60, 80, 100, 200]; // Day 1-7
+
 interface UnlockableSurvey {
   id: number;
   company: string;
@@ -1207,6 +1217,130 @@ function Index() {
   const referralBonus = 200; // KSh per qualified referral
   const totalReferralEarnings = referrals.filter(r => r.status === 'completed').reduce((s, r) => s + r.earned, 0);
   const completedReferrals = referrals.filter(r => r.status === 'completed').length;
+
+  // ─── DAILY CHECK-IN STREAK STATE ───
+  const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const [streakCount, setStreakCount] = useState(() => {
+    try { return Number(localStorage.getItem('sp_streak_count')) || 0; } catch { return 0; }
+  });
+  const [lastCheckIn, setLastCheckIn] = useState(() => {
+    try { return localStorage.getItem('sp_last_checkin') || ''; } catch { return ''; }
+  });
+  const [streakClaimed, setStreakClaimed] = useState(() => {
+    try { return localStorage.getItem('sp_streak_claimed') === todayStr; } catch { return false; }
+  });
+  const [streakAnimation, setStreakAnimation] = useState(false);
+
+  const claimDailyBonus = () => {
+    if (streakClaimed) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    let newStreak: number;
+    if (lastCheckIn === yesterdayStr) {
+      newStreak = Math.min(streakCount + 1, 7); // continue streak
+    } else if (lastCheckIn === todayStr) {
+      return; // already claimed
+    } else {
+      newStreak = 1; // reset streak
+    }
+
+    const bonus = STREAK_BONUSES[newStreak - 1] || 30;
+    setStreakCount(newStreak);
+    setLastCheckIn(todayStr);
+    setStreakClaimed(true);
+    setBalance(prev => prev + bonus);
+    setStreakAnimation(true);
+    setTimeout(() => setStreakAnimation(false), 1500);
+
+    try {
+      localStorage.setItem('sp_streak_count', String(newStreak));
+      localStorage.setItem('sp_last_checkin', todayStr);
+      localStorage.setItem('sp_streak_claimed', todayStr);
+    } catch {}
+  };
+
+  // ─── EARNINGS BOOSTER STATE ───
+  const [activeBooster, setActiveBooster] = useState<{ name: string; dailyEarn: number; activatedAt: string; duration: number } | null>(() => {
+    try {
+      const raw = localStorage.getItem('sp_active_booster');
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
+  const [boosterCreditedToday, setBoosterCreditedToday] = useState(() => {
+    try { return localStorage.getItem('sp_booster_credited') === todayStr; } catch { return false; }
+  });
+  const [selectedBooster, setSelectedBooster] = useState(1); // default Silver
+
+  // Compute booster days elapsed and remaining
+  const boosterDaysElapsed = activeBooster ? Math.floor((Date.now() - new Date(activeBooster.activatedAt).getTime()) / 86_400_000) : 0;
+  const boosterDaysRemaining = activeBooster ? Math.max(0, activeBooster.duration - boosterDaysElapsed) : 0;
+  const boosterExpired = activeBooster ? boosterDaysRemaining <= 0 : false;
+
+  // Auto-credit booster earnings on page visit (once per day)
+  useEffect(() => {
+    if (activeBooster && !boosterExpired && !boosterCreditedToday) {
+      setBalance(prev => prev + activeBooster.dailyEarn);
+      setBoosterCreditedToday(true);
+      try { localStorage.setItem('sp_booster_credited', todayStr); } catch {}
+    }
+  }, [activeBooster, boosterExpired, boosterCreditedToday, todayStr]);
+
+  const activateBooster = (pkg: typeof boosterPackages[0]) => {
+    const booster = { name: pkg.name, dailyEarn: pkg.dailyEarn, activatedAt: new Date().toISOString(), duration: pkg.duration };
+    setActiveBooster(booster);
+    setBoosterCreditedToday(false);
+    try {
+      localStorage.setItem('sp_active_booster', JSON.stringify(booster));
+      localStorage.removeItem('sp_booster_credited');
+    } catch {}
+  };
+
+  const confirmBooster = async (pkgIndex: number) => {
+    const cleaned = phone.replace(/\D/g, '');
+    if (!cleaned || cleaned.length < 9) {
+      setError('Please enter a valid M-Pesa phone number.');
+      return;
+    }
+    const pkg = boosterPackages[pkgIndex];
+    if (!pkg) return;
+
+    setSelectedBooster(pkgIndex);
+    setIsSimulatingStk(true);
+    setError('');
+    setStkStatusMsg(`Sending M-Pesa STK push for KSh ${pkg.price} (${pkg.name} Booster) to ${phone}...`);
+
+    try {
+      const result = await initiateSTK(phone, pkg.price, `SPK-BST-${pkg.name}-${Date.now()}`);
+      if (!result.success || !result.checkoutId) {
+        setError(result.message || 'Payment initiation failed.');
+        setIsSimulatingStk(false);
+        setStkStatusMsg('');
+        return;
+      }
+      setStkStatusMsg(`STK push sent to ${phone}. Enter your M-Pesa PIN to activate ${pkg.name} Booster...`);
+
+      pollSTKStatus(
+        result.checkoutId,
+        async () => {
+          setIsSimulatingStk(false);
+          setStkStatusMsg('');
+          activateBooster(pkg);
+          closeModal();
+        },
+        (failMsg) => {
+          setIsSimulatingStk(false);
+          setStkStatusMsg('');
+          setError(failMsg || 'Booster activation failed.');
+        }
+      );
+    } catch (e) {
+      setIsSimulatingStk(false);
+      setStkStatusMsg('');
+      setError(e instanceof Error ? e.message : 'Booster activation failed.');
+    }
+  };
 
   // Strategic Social Proof Toasts (only shown inside dashboard for authenticated users, never on public landing)
   useEffect(() => {
@@ -2535,6 +2669,211 @@ function Index() {
                     </div>
                   </div>
                   <ArrowRight style={{ width: 20, height: 20, color: '#c4b5fd', flexShrink: 0, zIndex: 1 }} />
+                </div>
+
+                {/* ─── DAILY CHECK-IN STREAK CARD ─── */}
+                <div style={{
+                  background: '#fff',
+                  border: '1.5px solid #e5e7eb',
+                  borderRadius: 14,
+                  padding: '18px 20px',
+                  marginBottom: 16,
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ fontSize: 24 }}>{streakCount >= 3 ? '🔥' : '✨'}</div>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: '#1f2937' }}>Daily Check-in</div>
+                        <div style={{ fontSize: 11, color: '#6b7280' }}>
+                          {streakClaimed
+                            ? `Day ${streakCount} claimed! Come back tomorrow`
+                            : streakCount > 0
+                              ? `Day ${streakCount} streak — claim today's bonus!`
+                              : 'Tap to start your streak & earn daily bonus'}
+                        </div>
+                      </div>
+                    </div>
+                    {streakAnimation && (
+                      <div style={{
+                        background: '#10b981', color: '#fff', borderRadius: 99,
+                        padding: '4px 12px', fontSize: 13, fontWeight: 800,
+                        animation: 'slideUpModal 0.5s ease',
+                      }}>
+                        +KSh {STREAK_BONUSES[Math.min(streakCount - 1, 6)]}!
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 7-day streak dots */}
+                  <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+                    {STREAK_BONUSES.map((bonus, i) => {
+                      const done = i < streakCount;
+                      const current = i === streakCount && !streakClaimed;
+                      return (
+                        <div key={i} style={{
+                          flex: 1, textAlign: 'center',
+                        }}>
+                          <div style={{
+                            width: '100%', aspectRatio: '1', borderRadius: '50%',
+                            maxWidth: 38, margin: '0 auto',
+                            background: done
+                              ? 'linear-gradient(135deg, #f97316, #ef4444)'
+                              : current
+                                ? 'linear-gradient(135deg, #fbbf24, #f59e0b)'
+                                : '#f3f4f6',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: done ? 14 : 11,
+                            color: done ? '#fff' : current ? '#fff' : '#9ca3af',
+                            fontWeight: 800,
+                            boxShadow: current ? '0 0 0 3px rgba(245,158,11,0.3)' : 'none',
+                            transition: 'all 0.3s',
+                          }}>
+                            {done ? '🔥' : i === 6 ? '🎁' : `+${bonus}`}
+                          </div>
+                          <div style={{ fontSize: 9, color: done ? '#f97316' : '#9ca3af', fontWeight: 600, marginTop: 3 }}>
+                            {i === 6 ? 'Day 7' : `Day ${i + 1}`}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={claimDailyBonus}
+                    disabled={streakClaimed}
+                    style={{
+                      width: '100%',
+                      padding: '12px 0',
+                      borderRadius: 10,
+                      border: 'none',
+                      fontSize: 14,
+                      fontWeight: 800,
+                      cursor: streakClaimed ? 'default' : 'pointer',
+                      background: streakClaimed
+                        ? '#f3f4f6'
+                        : 'linear-gradient(135deg, #f97316, #ef4444)',
+                      color: streakClaimed ? '#9ca3af' : '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      transition: 'all 0.3s',
+                    }}
+                  >
+                    {streakClaimed ? (
+                      <><Check style={{ width: 16, height: 16 }} /> Claimed today — come back tomorrow!</>
+                    ) : (
+                      <><Zap style={{ width: 16, height: 16 }} /> Claim +KSh {STREAK_BONUSES[Math.min(streakCount, 6)]} Daily Bonus</>
+                    )}
+                  </button>
+                </div>
+
+                {/* ─── EARNINGS BOOSTER CARD ─── */}
+                <div style={{
+                  background: activeBooster && !boosterExpired
+                    ? 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)'
+                    : boosterExpired
+                      ? 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #b91c1c 100%)'
+                      : 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%)',
+                  borderRadius: 14,
+                  padding: '20px',
+                  color: '#fff',
+                  marginBottom: 20,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}>
+                  <div style={{ position:'absolute',top:-20,right:-20,width:80,height:80,borderRadius:'50%',background:'rgba(255,255,255,0.05)' }} />
+
+                  {activeBooster && !boosterExpired ? (
+                    /* Active booster display */
+                    <>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                        <div>
+                          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, color: '#6ee7b7', marginBottom: 4 }}>⚡ {activeBooster.name.toUpperCase()} BOOSTER ACTIVE</div>
+                          <div style={{ fontSize: 22, fontWeight: 900 }}>+KSh {activeBooster.dailyEarn}/day</div>
+                          <div style={{ fontSize: 12, color: '#a7f3d0', marginTop: 2 }}>Earning on autopilot · {boosterDaysRemaining} days left</div>
+                        </div>
+                        <div style={{
+                          background: 'rgba(255,255,255,0.15)',
+                          borderRadius: 12, padding: '8px 14px',
+                          textAlign: 'center',
+                        }}>
+                          <div style={{ fontSize: 20, fontWeight: 900 }}>Day</div>
+                          <div style={{ fontSize: 24, fontWeight: 900 }}>{boosterDaysElapsed + 1}</div>
+                          <div style={{ fontSize: 9, color: '#a7f3d0' }}>of {activeBooster.duration}</div>
+                        </div>
+                      </div>
+                      {/* Progress bar */}
+                      <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 99, height: 8, overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${Math.min(100, ((boosterDaysElapsed + 1) / activeBooster.duration) * 100)}%`,
+                          height: '100%',
+                          background: 'linear-gradient(90deg, #34d399, #6ee7b7)',
+                          borderRadius: 99,
+                          transition: 'width 0.8s ease',
+                        }} />
+                      </div>
+                      <div style={{ display:'flex', justifyContent:'space-between', marginTop: 6, fontSize: 10, color: '#a7f3d0' }}>
+                        <span>Earned so far: KSh {((boosterDaysElapsed + 1) * activeBooster.dailyEarn).toLocaleString()}</span>
+                        <span>Total: KSh {(activeBooster.duration * activeBooster.dailyEarn).toLocaleString()}</span>
+                      </div>
+                    </>
+                  ) : boosterExpired ? (
+                    /* Expired booster - reactivation prompt */
+                    <>
+                      <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                        <div style={{ fontSize: 36, marginBottom: 8 }}>⏰</div>
+                        <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>Your Booster Has Expired!</div>
+                        <div style={{ fontSize: 13, color: '#fca5a5' }}>You're missing out on KSh {activeBooster?.dailyEarn || 50}/day in passive earnings</div>
+                      </div>
+                      <button
+                        onClick={() => setModal('booster')}
+                        style={{
+                          width: '100%', padding: '13px 0', borderRadius: 10,
+                          border: 'none', fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                          background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                          color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                        }}
+                      >
+                        🔄 Reactivate Booster — Keep Earning
+                      </button>
+                    </>
+                  ) : (
+                    /* No booster - activation CTA */
+                    <>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+                        <div style={{ fontSize: 36 }}>⚡</div>
+                        <div>
+                          <div style={{ fontSize: 18, fontWeight: 900, lineHeight: 1.2 }}>Earnings Booster</div>
+                          <div style={{ fontSize: 13, color: '#a5b4fc', marginTop: 2 }}>Earn KSh 50-280/day on autopilot for 30 days</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                        {boosterPackages.map((pkg) => (
+                          <div key={pkg.name} style={{
+                            flex: 1, textAlign: 'center',
+                            background: 'rgba(255,255,255,0.1)',
+                            borderRadius: 10, padding: '10px 6px',
+                          }}>
+                            <div style={{ fontSize: 20 }}>{pkg.emoji}</div>
+                            <div style={{ fontSize: 11, fontWeight: 700 }}>{pkg.name}</div>
+                            <div style={{ fontSize: 10, color: '#a5b4fc' }}>+KSh {pkg.dailyEarn}/day</div>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setModal('booster')}
+                        style={{
+                          width: '100%', padding: '13px 0', borderRadius: 10,
+                          border: 'none', fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                          background: 'linear-gradient(135deg, #818cf8, #6366f1)',
+                          color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                        }}
+                      >
+                        <Zap style={{ width: 16, height: 16 }} /> Activate Earnings Booster
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 <div className="app-section-head">
@@ -4201,6 +4540,148 @@ function Index() {
                       </>
                     )}
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* --- EARNINGS BOOSTER SELECTION MODAL --- */}
+            {modal === 'booster' && (
+              <div className="modal-body" style={{ padding: 0, overflow: 'hidden' }}>
+                {/* Header */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%)',
+                  padding: '28px 24px 22px',
+                  textAlign: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}>
+                  <div style={{ position:'absolute',top:-30,right:-30,width:100,height:100,borderRadius:'50%',background:'rgba(255,255,255,0.06)' }} />
+                  <div style={{ fontSize: 40, marginBottom: 6 }}>⚡</div>
+                  <div style={{ color: '#a5b4fc', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
+                    Earnings Booster
+                  </div>
+                  <div style={{ color: '#fff', fontSize: 22, fontWeight: 900, lineHeight: 1.2, marginBottom: 4 }}>
+                    Earn on Autopilot
+                  </div>
+                  <div style={{ color: '#818cf8', fontSize: 13 }}>Activate a booster and earn KSh daily for 30 days — no surveys needed</div>
+                </div>
+
+                <div style={{ padding: '18px 20px 0' }}>
+                  {/* STK status */}
+                  {stkStatusMsg && (
+                    <div style={{
+                      background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 10,
+                      padding: '10px 14px', fontSize: 12, color: '#1e40af',
+                      display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12,
+                    }}>
+                      <span style={{ animation: 'pulse 1.5s infinite', fontSize: 16 }}>📡</span>
+                      {stkStatusMsg}
+                    </div>
+                  )}
+                  {error && (
+                    <div style={{
+                      background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 10,
+                      padding: '10px 14px', fontSize: 12, color: '#b91c1c', marginBottom: 12,
+                    }}>
+                      ⚠️ {error}
+                    </div>
+                  )}
+
+                  {/* Package cards */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+                    {boosterPackages.map((pkg, idx) => {
+                      const roi = ((pkg.total / pkg.price) * 100).toFixed(0);
+                      const isPopular = pkg.badge === 'POPULAR';
+                      const isBest = pkg.badge === 'BEST ROI';
+                      const isProcessing = isSimulatingStk && selectedBooster === idx;
+                      return (
+                        <div key={pkg.name} style={{
+                          border: isPopular ? '2px solid #6366f1' : isBest ? '2px solid #f59e0b' : '1.5px solid #e5e7eb',
+                          borderRadius: 14,
+                          padding: '16px',
+                          background: isPopular ? 'linear-gradient(135deg, #eef2ff, #e0e7ff)' : isBest ? 'linear-gradient(135deg, #fffbeb, #fef3c7)' : '#fff',
+                          position: 'relative',
+                          boxShadow: (isPopular || isBest) ? '0 4px 16px rgba(0,0,0,0.08)' : '0 1px 4px rgba(0,0,0,0.04)',
+                        }}>
+                          {(isPopular || isBest) && (
+                            <div style={{
+                              position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)',
+                              background: isPopular ? 'linear-gradient(90deg,#6366f1,#4f46e5)' : 'linear-gradient(90deg,#f59e0b,#d97706)',
+                              color: '#fff', fontSize: 10, fontWeight: 800, letterSpacing: 1,
+                              padding: '2px 12px', borderRadius: 99, whiteSpace: 'nowrap',
+                            }}>
+                              {isPopular ? '⭐ MOST POPULAR' : '🏆 BEST ROI'}
+                            </div>
+                          )}
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <div style={{ fontSize: 28 }}>{pkg.emoji}</div>
+                              <div>
+                                <div style={{ fontWeight: 800, fontSize: 16, color: '#1f2937' }}>{pkg.name} Booster</div>
+                                <div style={{ fontSize: 11, color: '#6b7280' }}>30 days · +KSh {pkg.dailyEarn}/day</div>
+                              </div>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <div style={{ fontSize: 20, fontWeight: 900, color: '#1f2937' }}>KSh {pkg.price.toLocaleString()}</div>
+                              <div style={{ fontSize: 10, color: '#9ca3af' }}>one-time</div>
+                            </div>
+                          </div>
+
+                          {/* ROI display */}
+                          <div style={{
+                            background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+                            border: '1px solid #6ee7b7',
+                            borderRadius: 8,
+                            padding: '8px 12px',
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            marginBottom: 12,
+                          }}>
+                            <div>
+                              <div style={{ fontSize: 12, fontWeight: 700, color: '#065f46' }}>
+                                Total return: KSh {pkg.total.toLocaleString()} in 30 days
+                              </div>
+                              <div style={{ fontSize: 11, color: '#047857' }}>
+                                Net profit: KSh {(pkg.total - pkg.price).toLocaleString()}
+                              </div>
+                            </div>
+                            <div style={{
+                              background: '#10b981', color: '#fff', borderRadius: 8,
+                              padding: '4px 10px', fontSize: 12, fontWeight: 900,
+                            }}>
+                              {roi}% ROI
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => confirmBooster(idx)}
+                            disabled={isSimulatingStk}
+                            style={{
+                              width: '100%', padding: '12px 0', borderRadius: 10,
+                              border: 'none', fontSize: 13, fontWeight: 800, cursor: 'pointer',
+                              background: isPopular
+                                ? 'linear-gradient(135deg, #6366f1, #4f46e5)'
+                                : isBest
+                                  ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                                  : 'linear-gradient(135deg, #374151, #1f2937)',
+                              color: '#fff',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                            }}
+                          >
+                            {isProcessing ? (
+                              <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span> Sending M-Pesa Request…</>
+                            ) : (
+                              <>📲 Pay KSh {pkg.price.toLocaleString()} &amp; Start Earning</>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <Button variant="ghost" className="modal-secondary" style={{ width: '100%', marginBottom: 16 }} onClick={closeModal}>
+                    Maybe Later
+                  </Button>
                 </div>
               </div>
             )}
