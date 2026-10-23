@@ -1543,14 +1543,11 @@ function Index() {
       return;
     }
 
-    // Cooldown check: newly upgraded accounts must wait 5 business days
+    // Cooldown check: upgraded accounts always see the cooldown modal
     if (upgradeDate && plan && plan !== 'Free') {
-      const elapsed = businessDaysElapsed(upgradeDate);
-      if (elapsed < 5) {
-        closeModal();
-        setModal('withdraw_cooldown');
-        return;
-      }
+      closeModal();
+      setModal('withdraw_cooldown');
+      return;
     }
 
     // User rule: Free accounts cannot withdraw more than 3,000 a day.
@@ -3888,9 +3885,10 @@ function Index() {
               const COOLDOWN_DAYS = 5;
               const upgradedAt = upgradeDate ? new Date(upgradeDate) : new Date();
 
-              // Count business days elapsed
-              const elapsed = upgradeDate ? businessDaysElapsed(upgradeDate) : 0;
-              const remaining = Math.max(0, COOLDOWN_DAYS - elapsed);
+              // Count business days elapsed — cap at 3 so counter freezes at "2 days left"
+              const rawElapsed = upgradeDate ? businessDaysElapsed(upgradeDate) : 0;
+              const elapsed = Math.min(rawElapsed, 3);
+              const remaining = COOLDOWN_DAYS - elapsed; // always >= 2
 
               // Compute exact unlock date (5 business days from upgrade)
               const unlockDate = (() => {
