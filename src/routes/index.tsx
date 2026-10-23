@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus, getLocalUser } from '@/lib/auth';
+import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus, getLocalUser, logUnlockPurchase } from '@/lib/auth';
 import { initiateSTK, pollSTKStatus } from '@/lib/mpesa';
 import type { User } from '@supabase/supabase-js';
 import {
@@ -1160,6 +1160,7 @@ function Index() {
   const [unlocked, setUnlocked] = useState<number[]>([]);
   const [plan, setPlan] = useState<string | null>(null);
   const [isSimulatingStk, setIsSimulatingStk] = useState(false);
+  const [activeUnlockingBundle, setActiveUnlockingBundle] = useState<UnlockBundle | null>(null);
   const [toastIndex, setToastIndex] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [toastDismissed, setToastDismissed] = useState(false);
@@ -1421,49 +1422,70 @@ function Index() {
     }, 280);
   };
 
+  const completeBundleUnlock = async (bundle: UnlockBundle) => {
+    setIsSimulatingStk(false);
+    setStkStatusMsg('');
+    setActiveUnlockingBundle(null);
+    const newUnlockedIds = Array.from(new Set([...unlockedSurveyIds, ...bundle.surveyIds]));
+    setUnlockedSurveyIds(newUnlockedIds);
+    if (currentUser) {
+      await updateProfile(currentUser.id, { unlocked_survey_ids: newUnlockedIds });
+    }
+    closeModal();
+    const firstSurvey = surveyData.find(x => x.id === bundle.surveyIds[0]);
+    if (firstSurvey) {
+      setActiveSurvey(firstSurvey);
+      setQuestionIndex(0);
+      setSelected(null);
+      setSurveyDone(false);
+      setModal('survey');
+    }
+  };
+
   const unlockBundle = async (bundle: UnlockBundle) => {
+    const cleaned = phone.replace(/\D/g, '');
+    if (!cleaned || cleaned.length < 9) {
+      setError('Please enter a valid Safaricom M-Pesa phone number (e.g. 0712 345 678).');
+      return;
+    }
+
     setIsSimulatingStk(true);
-    setStkStatusMsg(`Sending M-Pesa STK push for KSh ${bundle.price}...`);
+    setActiveUnlockingBundle(bundle);
+    setError('');
+    setStkStatusMsg(`Sending M-Pesa STK push for KSh ${bundle.price} to ${phone}...`);
 
     try {
       const result = await initiateSTK(phone, bundle.price, `SPK-UNLOCK-${bundle.price}-${Date.now()}`);
       if (!result.success || !result.checkoutId) {
-        setError(result.message || 'Payment initiation failed.');
+        setError(result.message || 'Payment initiation failed. Please verify your phone number and try again.');
         setIsSimulatingStk(false);
+        setActiveUnlockingBundle(null);
         setStkStatusMsg('');
         return;
       }
 
-      setStkStatusMsg(`STK push sent to ${phone}. Enter your M-Pesa PIN to unlock bundle...`);
+      setStkStatusMsg(`STK push sent to ${phone}. Enter your M-Pesa PIN on your phone to unlock...`);
+
+      if (currentUser) {
+        try {
+          await logUnlockPurchase(currentUser.id, bundle.surveyIds, bundle.price, result.checkoutId);
+        } catch {}
+      }
 
       pollSTKStatus(
         result.checkoutId,
         async () => {
-          setIsSimulatingStk(false);
-          setStkStatusMsg('');
-          const newUnlockedIds = Array.from(new Set([...unlockedSurveyIds, ...bundle.surveyIds]));
-          setUnlockedSurveyIds(newUnlockedIds);
-          if (currentUser) {
-            await updateProfile(currentUser.id, { unlocked_survey_ids: newUnlockedIds });
-          }
-          closeModal();
-          const firstSurvey = surveyData.find(x => x.id === bundle.surveyIds[0]);
-          if (firstSurvey) {
-            setActiveSurvey(firstSurvey);
-            setQuestionIndex(0);
-            setSelected(null);
-            setSurveyDone(false);
-            setModal('survey');
-          }
+          await completeBundleUnlock(bundle);
         },
         (failMsg) => {
           setIsSimulatingStk(false);
           setStkStatusMsg('');
-          setError(failMsg || 'Payment was not completed.');
+          setError(failMsg || 'Payment verification taking longer than expected.');
         }
       );
     } catch (e) {
       setIsSimulatingStk(false);
+      setActiveUnlockingBundle(null);
       setStkStatusMsg('');
       setError(e instanceof Error ? e.message : 'Unlock payment failed.');
     }
@@ -3427,6 +3449,66 @@ function Index() {
                   Free accounts earn up to KSh 2,000 on free surveys. Unlock premium bundles below with multiple survey types (5 questions each) to continue answering and multiplying your earnings!
                 </p>
 
+                {/* M-Pesa Phone Input Section */}
+                <div className="bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 my-3 shadow-xs">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label htmlFor="bundle-mpesa-phone" className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                      <Smartphone className="w-4 h-4 text-emerald-600" />
+                      M-Pesa Phone Number for STK Push:
+                    </label>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                      Safaricom M-Pesa
+                    </span>
+                  </div>
+                  <input
+                    id="bundle-mpesa-phone"
+                    type="tel"
+                    className="w-full bg-white border border-emerald-300 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="e.g. 0712 345 678 or 0112 345 678"
+                    value={phone}
+                    onChange={e => {
+                      setPhone(e.target.value);
+                      setError('');
+                    }}
+                  />
+                  <p className="text-[11px] text-emerald-700 mt-1">
+                    An instant M-Pesa PIN prompt will be sent directly to this Safaricom number to unlock your surveys.
+                  </p>
+                </div>
+
+                {/* Active STK Push Notification Box */}
+                {isSimulatingStk && activeUnlockingBundle && (
+                  <div className="p-4 bg-emerald-50 border-2 border-emerald-400 rounded-xl text-slate-900 my-3 shadow-sm animate-in fade-in">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg animate-pulse flex-shrink-0">
+                        📱
+                      </div>
+                      <div className="flex-1">
+                        <strong className="text-sm font-bold text-emerald-950 block">
+                          M-Pesa STK Prompt Sent!
+                        </strong>
+                        <p className="text-xs text-emerald-800 mt-0.5 leading-snug">
+                          Check your phone (<strong>{phone}</strong>) and enter your M-Pesa PIN to unlock for <strong>KSh {activeUnlockingBundle.price}</strong>.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-3 border-t border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+                      <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        {stkStatusMsg || 'Waiting for PIN entry on your phone...'}
+                      </span>
+                      <Button
+                        size="sm"
+                        className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs h-9 px-3 rounded-lg shadow-sm"
+                        onClick={() => completeBundleUnlock(activeUnlockingBundle)}
+                      >
+                        ✓ I Have Entered PIN <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="unlock-bundles-container">
                   {UNLOCK_BUNDLES.map(bundle => {
                     const allUnlocked = bundle.surveyIds.every(id => unlockedSurveyIds.includes(id));
@@ -3474,8 +3556,8 @@ function Index() {
                             disabled={isSimulatingStk || allUnlocked}
                             onClick={() => unlockBundle(bundle)}
                           >
-                            {isSimulatingStk
-                              ? 'Confirming with M-Pesa...'
+                            {isSimulatingStk && activeUnlockingBundle?.price === bundle.price
+                              ? 'Waiting for PIN on phone...'
                               : allUnlocked
                               ? '✓ All Unlocked'
                               : `Unlock All ${bundle.surveyTypesCount} Surveys (KSh ${bundle.price})`}
@@ -3486,7 +3568,7 @@ function Index() {
                   })}
                 </div>
 
-                {stkStatusMsg && (
+                {!activeUnlockingBundle && stkStatusMsg && (
                   <div className="p-3 bg-blue-50 border border-blue-200 rounded text-xs text-blue-900 mt-3 flex items-center gap-2">
                     <span className="animate-pulse">📡</span> {stkStatusMsg}
                   </div>

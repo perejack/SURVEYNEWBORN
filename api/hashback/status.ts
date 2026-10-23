@@ -22,32 +22,44 @@ function mapHashbackStatus(data: Record<string, unknown>): "paid" | "failed" | "
   const resultDesc = String(data.ResultDesc ?? data.resultDesc ?? data.message ?? "").toLowerCase();
   const status = String(data.status ?? data.Status ?? "").toLowerCase();
 
+  // True success: ResultCode 0 or explicit completed/paid status
   if (
     resultCode === "0" ||
     status === "success" ||
     status === "completed" ||
     status === "paid" ||
-    resultDesc.includes("success") ||
-    resultDesc.includes("processed successfully") ||
-    resultDesc.includes("accepted for processing")
+    resultDesc.includes("processed successfully")
   ) {
     return "paid";
   }
 
-  if (resultCode === "1037" || resultDesc.includes("user cannot be reached") || resultDesc.includes("ds timeout")) {
+  // Pending: Still processing, waiting for PIN, or timeout retry
+  if (
+    resultCode === "1037" ||
+    resultDesc.includes("user cannot be reached") ||
+    resultDesc.includes("ds timeout") ||
+    resultDesc.includes("accepted for processing") ||
+    status === "pending"
+  ) {
     return "pending";
   }
 
+  // Failed states: User cancelled, invalid PIN, insufficient balance
   const isFailed =
     resultCode === "1032" ||
+    resultCode === "1" ||
+    resultCode === "11" ||
+    resultCode === "2001" ||
     resultDesc.includes("cancelled by user") ||
     resultDesc.includes("canceled by user") ||
     resultDesc.includes("request cancelled") ||
     resultDesc.includes("insufficient") ||
     resultDesc.includes("wrong pin") ||
     resultDesc.includes("invalid pin") ||
+    resultDesc.includes("invalid state") ||
     status === "cancelled" ||
-    status === "canceled";
+    status === "canceled" ||
+    status === "failed";
 
   if (isFailed) return "failed";
   return "pending";
