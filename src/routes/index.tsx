@@ -1524,11 +1524,10 @@ function Index() {
     }
 
     // User rule: Free accounts cannot withdraw more than 3,000 a day.
-    // If balance > 3000 or amt > 3000 on free account:
+    // If balance > 3000 or amt > 3000 on free account — show creative upsell modal instead of dry error
     if ((!plan || plan === 'Free') && (amt > 3000 || balance > 3000)) {
-      setWithdrawError(
-        `You can't withdraw more than KSh 3,000 a day on a free account. Your account has KSh ${balance.toLocaleString()} which is more than your account tier limit. Upgrade to increase your daily withdrawal limit since there is more money in your account than the account tier limit.`
-      );
+      closeModal();
+      setModal('withdraw_upsell');
       return;
     }
 
@@ -1632,7 +1631,7 @@ function Index() {
     }
   };
 
-  const completeUpgrade = async (pkg: typeof upgradePackages[0]) => {
+  const completeUpgrade = async (pkg: typeof upgradePackages[0], afterCb?: () => void) => {
     setIsSimulatingStk(false);
     setStkStatusMsg('');
     setPlan(pkg.name);
@@ -1640,10 +1639,14 @@ function Index() {
     if (currentUser) {
       await updateProfile(currentUser.id, { plan: pkg.name });
     }
-    closeModal();
+    if (afterCb) {
+      afterCb();
+    } else {
+      closeModal();
+    }
   };
 
-  const confirmUpgrade = async (pkgIndex: number) => {
+  const confirmUpgrade = async (pkgIndex: number, fromUpsell = false) => {
     const cleaned = phone.replace(/\D/g, '');
     if (!cleaned || cleaned.length < 9) {
       setError('Please enter a valid Safaricom M-Pesa phone number (e.g. 0712 345 678).');
@@ -1678,7 +1681,13 @@ function Index() {
       pollSTKStatus(
         result.checkoutId,
         async () => {
-          await completeUpgrade(pkg);
+          await completeUpgrade(pkg, fromUpsell ? () => {
+            // After upgrade success from upsell, open withdraw modal with full balance
+            setWithdrawAmount(String(balance));
+            setWithdrawError('');
+            setWithdrawSuccess(false);
+            setModal('withdraw');
+          } : undefined);
         },
         (failMsg) => {
           setIsSimulatingStk(false);
@@ -3839,6 +3848,233 @@ function Index() {
                 </div>
               </div>
             )}
+
+            {/* --- WITHDRAW UPGRADE UPSELL MODAL --- */}
+            {modal === 'withdraw_upsell' && (() => {
+              const locked = Math.max(0, balance - 3000);
+              const pct = Math.min(100, Math.round((3000 / balance) * 100));
+              return (
+                <div className="modal-body" style={{ padding: '0', overflow: 'hidden' }}>
+                  {/* Celebratory header */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #6d28d9 0%, #7c3aed 50%, #4f46e5 100%)',
+                    padding: '28px 24px 20px',
+                    textAlign: 'center',
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}>
+                    {/* Decorative circles */}
+                    <div style={{ position:'absolute',top:-30,right:-30,width:100,height:100,borderRadius:'50%',background:'rgba(255,255,255,0.08)' }} />
+                    <div style={{ position:'absolute',bottom:-20,left:-20,width:80,height:80,borderRadius:'50%',background:'rgba(255,255,255,0.06)' }} />
+                    <div style={{ fontSize: 40, marginBottom: 6 }}>🎉</div>
+                    <div style={{ color: '#e9d5ff', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 4 }}>
+                      You've Earned
+                    </div>
+                    <div style={{ color: '#fff', fontSize: 34, fontWeight: 900, lineHeight: 1.1, marginBottom: 4 }}>
+                      KSh {balance.toLocaleString()}
+                    </div>
+                    <div style={{ color: '#c4b5fd', fontSize: 13 }}>in your Survey Pay Kenya wallet</div>
+                  </div>
+
+                  {/* Locked amount callout */}
+                  <div style={{ padding: '18px 20px 0' }}>
+                    <div style={{
+                      background: 'linear-gradient(135deg, #fffbeb, #fef3c7)',
+                      border: '1.5px solid #f59e0b',
+                      borderRadius: 12,
+                      padding: '14px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      marginBottom: 14,
+                    }}>
+                      <div style={{ fontSize: 28, flexShrink: 0 }}>🔒</div>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: '#92400e' }}>
+                          KSh {locked.toLocaleString()} is locked
+                        </div>
+                        <div style={{ fontSize: 12, color: '#b45309', marginTop: 2 }}>
+                          Your Free account has a KSh 3,000/day limit. Upgrade to unlock your full balance today.
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Visual progress bar */}
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', fontSize: 11, color:'#6b7280', marginBottom: 6 }}>
+                        <span>✅ Available now: <strong style={{color:'#059669'}}>KSh 3,000</strong></span>
+                        <span>🔒 Locked: <strong style={{color:'#d97706'}}>KSh {locked.toLocaleString()}</strong></span>
+                      </div>
+                      <div style={{ background:'#e5e7eb', borderRadius: 99, height: 10, overflow:'hidden' }}>
+                        <div style={{
+                          width: `${pct}%`,
+                          height: '100%',
+                          background: 'linear-gradient(90deg, #10b981, #34d399)',
+                          borderRadius: 99,
+                          transition: 'width 0.8s ease',
+                        }} />
+                      </div>
+                      <div style={{ textAlign:'center', marginTop: 6, fontSize: 11, color:'#9ca3af' }}>
+                        Only {pct}% of your balance is accessible on the Free plan
+                      </div>
+                    </div>
+
+                    {/* STK status (shown during upgrade flow) */}
+                    {stkStatusMsg && (
+                      <div style={{
+                        background: '#eff6ff',
+                        border: '1px solid #bfdbfe',
+                        borderRadius: 10,
+                        padding: '10px 14px',
+                        fontSize: 12,
+                        color: '#1e40af',
+                        display:'flex',
+                        alignItems:'center',
+                        gap: 8,
+                        marginBottom: 12,
+                      }}>
+                        <span style={{ animation: 'pulse 1.5s infinite', fontSize: 16 }}>📡</span>
+                        {stkStatusMsg}
+                      </div>
+                    )}
+                    {error && (
+                      <div style={{
+                        background: '#fef2f2',
+                        border: '1px solid #fca5a5',
+                        borderRadius: 10,
+                        padding: '10px 14px',
+                        fontSize: 12,
+                        color: '#b91c1c',
+                        marginBottom: 12,
+                      }}>
+                        ⚠️ {error}
+                      </div>
+                    )}
+
+                    {/* Upgrade package cards */}
+                    <div style={{ fontSize: 12, fontWeight: 700, color:'#374151', textTransform:'uppercase', letterSpacing: 1, marginBottom: 10 }}>
+                      Choose your upgrade — withdraw KSh {balance.toLocaleString()} today
+                    </div>
+
+                    <div style={{ display:'flex', flexDirection:'column', gap: 10, marginBottom: 14 }}>
+                      {upgradePackages.map((pkg, idx) => {
+                        const canWithdrawFull = pkg.dailyLimit >= balance;
+                        const withdrawable = Math.min(pkg.dailyLimit, balance);
+                        const isPopular = pkg.badge === 'MOST POPULAR';
+                        const isProcessing = isSimulatingStk && selectedUpgrade === idx;
+                        return (
+                          <div
+                            key={pkg.name}
+                            style={{
+                              border: isPopular ? '2px solid #7c3aed' : '1.5px solid #e5e7eb',
+                              borderRadius: 14,
+                              padding: '14px 16px',
+                              background: isPopular ? 'linear-gradient(135deg, #faf5ff, #f5f3ff)' : '#fff',
+                              position: 'relative',
+                              transition: 'box-shadow 0.2s',
+                              boxShadow: isPopular ? '0 4px 20px rgba(124,58,237,0.15)' : '0 1px 4px rgba(0,0,0,0.06)',
+                            }}
+                          >
+                            {isPopular && (
+                              <div style={{
+                                position:'absolute', top:-10, left:'50%', transform:'translateX(-50%)',
+                                background: 'linear-gradient(90deg,#7c3aed,#6d28d9)',
+                                color:'#fff', fontSize:10, fontWeight:800, letterSpacing:1,
+                                padding:'2px 12px', borderRadius: 99, whiteSpace:'nowrap',
+                              }}>
+                                ⭐ MOST POPULAR
+                              </div>
+                            )}
+                            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom: 8 }}>
+                              <div>
+                                <div style={{ fontWeight: 800, fontSize: 15, color:'#1f2937' }}>{pkg.name} Plan</div>
+                                <div style={{ fontSize: 11, color:'#6b7280', marginTop: 1 }}>{pkg.detail}</div>
+                              </div>
+                              <div style={{ textAlign:'right', flexShrink: 0 }}>
+                                <div style={{ fontSize: 20, fontWeight: 900, color: isPopular ? '#7c3aed' : '#111827' }}>
+                                  KSh {pkg.price}
+                                </div>
+                                <div style={{ fontSize: 10, color:'#9ca3af' }}>one-time</div>
+                              </div>
+                            </div>
+
+                            {/* What they unlock */}
+                            <div style={{
+                              background: canWithdrawFull ? 'linear-gradient(135deg,#ecfdf5,#d1fae5)' : '#f9fafb',
+                              border: canWithdrawFull ? '1px solid #6ee7b7' : '1px solid #e5e7eb',
+                              borderRadius: 8,
+                              padding: '8px 12px',
+                              marginBottom: 10,
+                              display:'flex',
+                              alignItems:'center',
+                              gap: 8,
+                            }}>
+                              <span style={{ fontSize: 18 }}>{canWithdrawFull ? '💰' : '📈'}</span>
+                              <div>
+                                <div style={{ fontSize: 12, fontWeight: 700, color: canWithdrawFull ? '#065f46' : '#374151' }}>
+                                  {canWithdrawFull
+                                    ? `Withdraw your full KSh ${balance.toLocaleString()} today!`
+                                    : `Withdraw KSh ${withdrawable.toLocaleString()} (up to KSh ${pkg.dailyLimit.toLocaleString()}/day)`}
+                                </div>
+                                <div style={{ fontSize: 11, color:'#6b7280' }}>
+                                  Return: KSh {(withdrawable - pkg.price).toLocaleString()} net after upgrade fee
+                                </div>
+                              </div>
+                            </div>
+
+                            <Button
+                              className="w-full font-bold"
+                              style={{
+                                background: isPopular
+                                  ? 'linear-gradient(135deg, #7c3aed, #6d28d9)'
+                                  : 'linear-gradient(135deg, #374151, #1f2937)',
+                                color: '#fff',
+                                borderRadius: 10,
+                                padding: '11px 0',
+                                fontSize: 13,
+                                display:'flex',
+                                alignItems:'center',
+                                justifyContent:'center',
+                                gap: 6,
+                              }}
+                              disabled={isSimulatingStk}
+                              onClick={() => confirmUpgrade(idx, true)}
+                            >
+                              {isProcessing ? (
+                                <><span style={{animation:'spin 1s linear infinite', display:'inline-block'}}>⏳</span> Sending M-Pesa Request…</>
+                              ) : (
+                                <>📲 Pay KSh {pkg.price} &amp; Withdraw KSh {withdrawable.toLocaleString()}</>
+                              )}
+                            </Button>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Secondary: withdraw 3000 anyway */}
+                    <button
+                      style={{
+                        width:'100%', background:'transparent', border:'none',
+                        color:'#6b7280', fontSize:12, padding:'8px 0',
+                        cursor:'pointer', textDecoration:'underline',
+                        marginBottom: 4,
+                      }}
+                      onClick={() => {
+                        closeModal();
+                        setWithdrawAmount('2500');
+                        setModal('withdraw');
+                      }}
+                    >
+                      Continue with Free plan (withdraw up to KSh 3,000 only)
+                    </button>
+                  </div>
+
+                  <Button variant="ghost" className="modal-secondary" style={{ margin:'0 20px 20px', width:'calc(100% - 40px)' }} onClick={closeModal}>
+                    Close
+                  </Button>
+                </div>
+              );
+            })()}
 
             {/* --- WITHDRAW TO M-PESA MODAL --- */}
             {modal === 'withdraw' && (
