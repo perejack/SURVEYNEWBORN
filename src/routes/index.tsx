@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus, getLocalUser, logUnlockPurchase } from '@/lib/auth';
+import { signUp, signIn, signOut, getProfile, updateProfile, logSurveyCompletion, logWithdrawal, updateWithdrawalStatus, getLocalUser, logUnlockPurchase, logUpgradePurchase } from '@/lib/auth';
 import { initiateSTK, pollSTKStatus } from '@/lib/mpesa';
 import type { User } from '@supabase/supabase-js';
 import {
@@ -1632,41 +1632,58 @@ function Index() {
     }
   };
 
+  const completeUpgrade = async (pkg: typeof upgradePackages[0]) => {
+    setIsSimulatingStk(false);
+    setStkStatusMsg('');
+    setPlan(pkg.name);
+    setUnlocked([1, 2, 3]);
+    if (currentUser) {
+      await updateProfile(currentUser.id, { plan: pkg.name });
+    }
+    closeModal();
+  };
+
   const confirmUpgrade = async (pkgIndex: number) => {
+    const cleaned = phone.replace(/\D/g, '');
+    if (!cleaned || cleaned.length < 9) {
+      setError('Please enter a valid Safaricom M-Pesa phone number (e.g. 0712 345 678).');
+      return;
+    }
+
     setSelectedUpgrade(pkgIndex);
     const pkg = upgradePackages[pkgIndex];
     if (!pkg) return;
 
     setIsSimulatingStk(true);
-    setStkStatusMsg(`Sending M-Pesa STK push for KSh ${pkg.price} (${pkg.name} Tier)...`);
+    setError('');
+    setStkStatusMsg(`Sending M-Pesa STK push for KSh ${pkg.price} (${pkg.name} Tier) to ${phone}...`);
 
     try {
       const result = await initiateSTK(phone, pkg.price, `SPK-UPG-${pkg.name}-${Date.now()}`);
       if (!result.success || !result.checkoutId) {
-        setError(result.message || 'Payment initiation failed.');
+        setError(result.message || 'Payment initiation failed. Please verify your phone number and try again.');
         setIsSimulatingStk(false);
         setStkStatusMsg('');
         return;
       }
 
-      setStkStatusMsg(`STK push sent to ${phone}. Enter your M-Pesa PIN to activate ${pkg.name} Tier...`);
+      setStkStatusMsg(`STK push sent to ${phone}. Enter your M-Pesa PIN on your phone to activate ${pkg.name} Tier...`);
+
+      if (currentUser) {
+        try {
+          await logUpgradePurchase(currentUser.id, pkg.name, pkg.price, result.checkoutId);
+        } catch {}
+      }
 
       pollSTKStatus(
         result.checkoutId,
         async () => {
-          setIsSimulatingStk(false);
-          setStkStatusMsg('');
-          setPlan(pkg.name);
-          setUnlocked([1, 2, 3]);
-          if (currentUser) {
-            await updateProfile(currentUser.id, { plan: pkg.name });
-          }
-          closeModal();
+          await completeUpgrade(pkg);
         },
         (failMsg) => {
           setIsSimulatingStk(false);
           setStkStatusMsg('');
-          setError(failMsg || 'Upgrade payment was not completed.');
+          setError(failMsg || 'Upgrade payment verification taking longer than expected.');
         }
       );
     } catch (e) {
@@ -3598,6 +3615,66 @@ function Index() {
                   Free accounts have a KSh 3,000 daily withdrawal limit. Upgrade your tier to increase your daily limits and unlock high-paying surveys.
                 </p>
 
+                {/* M-Pesa Phone Input Section */}
+                <div className="bg-purple-50/90 border border-purple-200 rounded-xl p-3.5 my-3 shadow-xs">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label htmlFor="upgrade-mpesa-phone" className="text-xs font-bold text-purple-950 flex items-center gap-1.5">
+                      <Smartphone className="w-4 h-4 text-purple-600" />
+                      M-Pesa Phone Number for Upgrade STK:
+                    </label>
+                    <span className="text-[10px] font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded">
+                      Safaricom M-Pesa
+                    </span>
+                  </div>
+                  <input
+                    id="upgrade-mpesa-phone"
+                    type="tel"
+                    className="w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="e.g. 0712 345 678 or 0112 345 678"
+                    value={phone}
+                    onChange={e => {
+                      setPhone(e.target.value);
+                      setError('');
+                    }}
+                  />
+                  <p className="text-[11px] text-purple-700 mt-1">
+                    Enter your active Safaricom line. The STK prompt to upgrade your account will be sent here.
+                  </p>
+                </div>
+
+                {/* Active STK Push Notification Box */}
+                {isSimulatingStk && (
+                  <div className="p-4 bg-purple-50 border-2 border-purple-400 rounded-xl text-slate-900 my-3 shadow-sm animate-in fade-in">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg animate-pulse flex-shrink-0">
+                        📱
+                      </div>
+                      <div className="flex-1">
+                        <strong className="text-sm font-bold text-purple-950 block">
+                          M-Pesa STK Prompt Sent!
+                        </strong>
+                        <p className="text-xs text-purple-800 mt-0.5 leading-snug">
+                          Check your phone (<strong>{phone}</strong>) and enter your M-Pesa PIN for <strong>KSh {upgradePackages[selectedUpgrade]?.price}</strong> ({upgradePackages[selectedUpgrade]?.name} Tier).
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-3 border-t border-purple-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+                      <span className="text-[11px] text-purple-700 font-medium flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-purple-500 animate-ping"></span>
+                        {stkStatusMsg || 'Waiting for PIN entry on your phone...'}
+                      </span>
+                      <Button
+                        size="sm"
+                        className="w-full sm:w-auto bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs h-9 px-3 rounded-lg shadow-sm"
+                        onClick={() => completeUpgrade(upgradePackages[selectedUpgrade]!)}
+                      >
+                        ✓ I Have Entered PIN <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="upgrade-cards-grid">
                   {upgradePackages.map((pkg, idx) => (
                     <div
@@ -3632,13 +3709,19 @@ function Index() {
                   ))}
                 </div>
 
-                {stkStatusMsg && (
+                {!isSimulatingStk && stkStatusMsg && (
                   <div className="p-3 bg-purple-50 border border-purple-200 rounded text-xs text-purple-900 my-3 flex items-center gap-2">
                     <span className="animate-pulse">📡</span> {stkStatusMsg}
                   </div>
                 )}
 
-                <div className="modal-note border-purple-200 bg-purple-50 text-purple-900">
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-900 mt-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" /> {error}
+                  </div>
+                )}
+
+                <div className="modal-note border-purple-200 bg-purple-50 text-purple-900 mt-3">
                   <ShieldCheck className="text-purple-600" />
                   <span>
                     Upgrading updates your withdrawal limit to up to KSh {(upgradePackages[selectedUpgrade]?.dailyLimit ?? 10000).toLocaleString()}/day and unlocks all surveys.
