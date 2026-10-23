@@ -35,6 +35,9 @@ import {
   FileText,
   Users,
   BarChart3,
+  Copy,
+  Share2,
+  MessageCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hero from '@/assets/kenya-community.jpg';
@@ -69,7 +72,7 @@ export const Route = createFileRoute('/')({
   component: Index,
 });
 
-type View = 'landing' | 'home' | 'surveys' | 'wallet' | 'profile';
+type View = 'landing' | 'home' | 'surveys' | 'wallet' | 'referrals' | 'profile';
 type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'withdraw_upsell' | 'withdraw_cooldown' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
 
 interface Question {
@@ -1179,6 +1182,31 @@ function Index() {
   const [upgradeDate, setUpgradeDate] = useState<string | null>(() => {
     try { return localStorage.getItem('sp_upgrade_date'); } catch { return null; }
   });
+
+  // ─── REFERRAL SYSTEM STATE ───
+  const [referralCode] = useState(() => {
+    try {
+      const stored = localStorage.getItem('sp_referral_code');
+      if (stored) return stored;
+      const code = 'SPK-' + Math.random().toString(36).substring(2, 6).toUpperCase() + Math.floor(10 + Math.random() * 90);
+      localStorage.setItem('sp_referral_code', code);
+      return code;
+    } catch {
+      return 'SPK-DEMO42';
+    }
+  });
+  const [referralCopied, setReferralCopied] = useState(false);
+
+  // Demo referred friends data (labeled as demo per project rules)
+  const [referrals] = useState([
+    { name: 'Brian M.', phone: '0714***890', status: 'completed' as const, earned: 200, date: '2 days ago' },
+    { name: 'Faith W.', phone: '0722***456', status: 'completed' as const, earned: 200, date: '3 days ago' },
+    { name: 'Kevin O.', phone: '0733***123', status: 'joined' as const, earned: 0, date: '1 day ago' },
+    { name: 'Mercy A.', phone: '0710***678', status: 'pending' as const, earned: 0, date: 'Today' },
+  ]);
+  const referralBonus = 200; // KSh per qualified referral
+  const totalReferralEarnings = referrals.filter(r => r.status === 'completed').reduce((s, r) => s + r.earned, 0);
+  const completedReferrals = referrals.filter(r => r.status === 'completed').length;
 
   // Strategic Social Proof Toasts (only shown inside dashboard for authenticated users, never on public landing)
   useEffect(() => {
@@ -2355,6 +2383,7 @@ function Index() {
               <NavButton icon={Home} label="Overview" active={view === 'home'} onClick={() => navigate('home')} />
               <NavButton icon={Search} label="Explore surveys" active={view === 'surveys'} onClick={() => navigate('surveys')} />
               <NavButton icon={Wallet} label="My wallet" active={view === 'wallet'} onClick={() => navigate('wallet')} />
+              <NavButton icon={Gift} label="Invite & Earn" active={view === 'referrals'} onClick={() => navigate('referrals')} />
               <NavButton icon={Sparkles} label="Upgrade account" active={false} onClick={() => setModal('upgrade')} />
               <NavButton icon={UserRound} label="My profile" active={view === 'profile'} onClick={() => navigate('profile')} />
             </div>
@@ -2471,6 +2500,42 @@ function Index() {
                   </Button>
                 </div>
 
+                {/* Invite & Earn Promo Card on Home Dashboard */}
+                <div
+                  onClick={() => navigate('referrals')}
+                  style={{
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 40%, #4f46e5 100%)',
+                    borderRadius: 14,
+                    padding: '18px 20px',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 20,
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div style={{ position:'absolute',top:-20,right:-20,width:70,height:70,borderRadius:'50%',background:'rgba(255,255,255,0.06)' }} />
+                  <div style={{ display:'flex', alignItems:'center', gap: 14, zIndex: 1 }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 12,
+                      background: 'rgba(255,255,255,0.15)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 22,
+                    }}>🎁</div>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 2 }}>Invite Friends, Earn KSh {referralBonus}</div>
+                      <div style={{ fontSize: 12, color: '#c4b5fd' }}>
+                        {completedReferrals > 0
+                          ? `${completedReferrals} friends earned you KSh ${totalReferralEarnings.toLocaleString()}`
+                          : 'Share your code and earn for every friend who joins'}
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight style={{ width: 20, height: 20, color: '#c4b5fd', flexShrink: 0, zIndex: 1 }} />
+                </div>
 
                 <div className="app-section-head">
                   <div>
@@ -2942,6 +3007,266 @@ function Index() {
               </>
             )}
 
+            {/* ════════ INVITE & EARN (REFERRAL) VIEW ════════ */}
+            {view === 'referrals' && (
+              <>
+                <div className="app-topline">
+                  <div className="section-kicker">INVITE & EARN / REFERRALS</div>
+                  <span className="preview-badge">
+                    <span className="demo-dot" /> Demo referral data
+                  </span>
+                </div>
+                <div className="page-title">
+                  <h1>
+                    Invite &amp; Earn<span className="heading-flower">✳</span>
+                  </h1>
+                </div>
+
+                {/* Hero referral card */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 40%, #4f46e5 100%)',
+                  borderRadius: 16,
+                  padding: '28px 22px 24px',
+                  color: '#fff',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  marginBottom: 20,
+                }}>
+                  <div style={{ position:'absolute',top:-30,right:-30,width:100,height:100,borderRadius:'50%',background:'rgba(255,255,255,0.07)' }} />
+                  <div style={{ position:'absolute',bottom:-20,left:-20,width:80,height:80,borderRadius:'50%',background:'rgba(255,255,255,0.05)' }} />
+                  <div style={{ fontSize: 36, marginBottom: 8 }}>🎁</div>
+                  <div style={{ fontSize: 22, fontWeight: 900, lineHeight: 1.2, marginBottom: 4 }}>
+                    Earn KSh {referralBonus} for every friend you invite!
+                  </div>
+                  <div style={{ fontSize: 13, color: '#c4b5fd', marginBottom: 20 }}>
+                    Share your code. When your friend signs up and completes their first survey, you both earn KSh {referralBonus} bonus.
+                  </div>
+
+                  {/* Referral code box */}
+                  <div style={{
+                    background: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(10px)',
+                    borderRadius: 12,
+                    padding: '14px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: '1.5px dashed rgba(255,255,255,0.3)',
+                  }}>
+                    <div>
+                      <div style={{ fontSize: 10, color: '#c4b5fd', fontWeight: 700, letterSpacing: 2, marginBottom: 2 }}>YOUR REFERRAL CODE</div>
+                      <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: 3, fontFamily: 'monospace' }}>{referralCode}</div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(referralCode).catch(() => {});
+                        setReferralCopied(true);
+                        setTimeout(() => setReferralCopied(false), 2000);
+                      }}
+                      style={{
+                        background: referralCopied ? '#10b981' : 'rgba(255,255,255,0.2)',
+                        border: 'none',
+                        borderRadius: 10,
+                        padding: '10px 16px',
+                        color: '#fff',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        transition: 'background 0.3s',
+                      }}
+                    >
+                      {referralCopied ? <><Check style={{ width: 14, height: 14 }} /> Copied!</> : <><Copy style={{ width: 14, height: 14 }} /> Copy</>}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 20 }}>
+                  <div style={{
+                    background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, padding: '16px 12px', textAlign: 'center',
+                  }}>
+                    <div style={{ fontSize: 28, fontWeight: 900, color: '#7c3aed' }}>{referrals.length}</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 600 }}>Friends Invited</div>
+                  </div>
+                  <div style={{
+                    background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, padding: '16px 12px', textAlign: 'center',
+                  }}>
+                    <div style={{ fontSize: 28, fontWeight: 900, color: '#059669' }}>{completedReferrals}</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 600 }}>Earned Bonus</div>
+                  </div>
+                  <div style={{
+                    background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, padding: '16px 12px', textAlign: 'center',
+                  }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: '#059669' }}>KSh {totalReferralEarnings.toLocaleString()}</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 600 }}>Total Earned</div>
+                  </div>
+                </div>
+
+                {/* Share buttons */}
+                <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+                  <button
+                    onClick={() => {
+                      const msg = `Hey! Join Survey Pay Kenya and earn money to M-Pesa by sharing your opinion. Use my code ${referralCode} to sign up and we both get KSh ${referralBonus} bonus! 💰🎉 https://surveypaykenya.com/?ref=${referralCode}`;
+                      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+                    }}
+                    style={{
+                      flex: 1,
+                      background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: 12,
+                      padding: '14px 0',
+                      fontSize: 14,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                    }}
+                  >
+                    <MessageCircle style={{ width: 18, height: 18 }} />
+                    Share via WhatsApp
+                  </button>
+                  <button
+                    onClick={() => {
+                      const msg = `Join Survey Pay Kenya! Use my code ${referralCode} to sign up and we both get KSh ${referralBonus} bonus. https://surveypaykenya.com/?ref=${referralCode}`;
+                      window.open(`sms:?body=${encodeURIComponent(msg)}`, '_blank');
+                    }}
+                    style={{
+                      flex: 1,
+                      background: 'linear-gradient(135deg, #374151, #1f2937)',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: 12,
+                      padding: '14px 0',
+                      fontSize: 14,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                    }}
+                  >
+                    <Share2 style={{ width: 18, height: 18 }} />
+                    Share via SMS
+                  </button>
+                </div>
+
+                {/* How it works */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #faf5ff, #f5f3ff)',
+                  border: '1.5px solid #ddd6fe',
+                  borderRadius: 14,
+                  padding: '18px 20px',
+                  marginBottom: 24,
+                }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: '#5b21b6', marginBottom: 14 }}>💡 How it works</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {[
+                      { step: '1', icon: '📤', title: 'Share your code', desc: 'Send your referral code to friends via WhatsApp, SMS, or social media' },
+                      { step: '2', icon: '👤', title: 'Friend signs up', desc: 'They create a free account using your referral code' },
+                      { step: '3', icon: '📝', title: 'They complete a survey', desc: 'Once they finish their first survey, both of you qualify' },
+                      { step: '4', icon: '💰', title: 'You both earn KSh ' + referralBonus, desc: 'Bonus is added to your wallet instantly — withdraw anytime!' },
+                    ].map((s) => (
+                      <div key={s.step} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                        <div style={{
+                          width: 36, height: 36, borderRadius: '50%',
+                          background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                          color: '#fff', fontWeight: 900, fontSize: 14,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          flexShrink: 0,
+                        }}>
+                          {s.icon}
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: 13, color: '#1f2937' }}>{s.title}</div>
+                          <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.4 }}>{s.desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Referred friends list */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: '#1f2937', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Users style={{ width: 18, height: 18, color: '#7c3aed' }} />
+                    Your Referrals ({referrals.length})
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {referrals.map((r, i) => (
+                      <div key={i} style={{
+                        background: '#fff',
+                        border: '1.5px solid #e5e7eb',
+                        borderRadius: 12,
+                        padding: '12px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <div style={{
+                            width: 40, height: 40, borderRadius: '50%',
+                            background: r.status === 'completed' ? 'linear-gradient(135deg,#10b981,#059669)'
+                              : r.status === 'joined' ? 'linear-gradient(135deg,#f59e0b,#d97706)'
+                              : 'linear-gradient(135deg,#9ca3af,#6b7280)',
+                            color: '#fff', fontWeight: 800, fontSize: 16,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            {r.name.charAt(0)}
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: 700, fontSize: 14, color: '#1f2937' }}>{r.name}</div>
+                            <div style={{ fontSize: 11, color: '#9ca3af' }}>{r.phone} · {r.date}</div>
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: 0.5,
+                            padding: '3px 8px',
+                            borderRadius: 99,
+                            background: r.status === 'completed' ? '#ecfdf5' : r.status === 'joined' ? '#fffbeb' : '#f3f4f6',
+                            color: r.status === 'completed' ? '#065f46' : r.status === 'joined' ? '#92400e' : '#6b7280',
+                            marginBottom: 2,
+                          }}>
+                            {r.status === 'completed' ? '✓ EARNED' : r.status === 'joined' ? '⏳ SURVEY PENDING' : '📨 INVITED'}
+                          </div>
+                          {r.earned > 0 && (
+                            <div style={{ fontSize: 13, fontWeight: 800, color: '#059669' }}>+KSh {r.earned}</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom motivational nudge */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+                  border: '1.5px solid #6ee7b7',
+                  borderRadius: 14,
+                  padding: '16px 20px',
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}>
+                  <div style={{ fontSize: 28, marginBottom: 6 }}>🚀</div>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: '#065f46', marginBottom: 4 }}>
+                    Invite 5 friends = KSh {(5 * referralBonus).toLocaleString()} bonus!
+                  </div>
+                  <div style={{ fontSize: 12, color: '#047857' }}>
+                    That's enough for a withdrawal. Your friends earn too — everybody wins!
+                  </div>
+                </div>
+              </>
+            )}
+
             {view === 'profile' && (
               <>
                 <div className="app-topline">
@@ -3043,12 +3368,12 @@ function Index() {
             </button>
 
             <button
-              onClick={() => setModal('upgrade')}
-              className="bottom-nav-item nav-upgrade"
+              onClick={() => navigate('referrals')}
+              className={`bottom-nav-item nav-upgrade ${view === 'referrals' ? 'active' : ''}`}
             >
-              <Sparkles />
-              <span>Upgrade</span>
-              <span className="bottom-nav-badge">HOT</span>
+              <Gift />
+              <span>Refer</span>
+              <span className="bottom-nav-badge">KSh 200</span>
             </button>
 
             <button
