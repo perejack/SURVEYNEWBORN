@@ -1782,10 +1782,58 @@ function Index() {
         {mobileMenu && (
           <nav className="mobile-menu" aria-label="Mobile navigation">
             {(['landing', 'home', 'surveys', 'wallet', 'profile'] as View[]).map(v => (
-              <Button key={v} variant="ghost" onClick={() => navigate(v)}>
+              <Button
+                key={v}
+                variant="ghost"
+                className={`justify-start text-sm font-semibold py-3 ${view === v ? 'text-emerald-700 bg-emerald-50' : 'text-slate-700'}`}
+                onClick={() => {
+                  navigate(v);
+                  setMobileMenu(false);
+                }}
+              >
                 {v === 'landing' ? 'Discover' : v === 'home' ? 'Dashboard' : (v[0]?.toUpperCase() ?? '') + v.slice(1)}
               </Button>
             ))}
+            {!currentUser ? (
+              <div className="pt-3 mt-2 border-t border-slate-100 flex flex-col gap-2">
+                <Button
+                  className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold h-11 rounded-lg"
+                  onClick={() => {
+                    setMobileMenu(false);
+                    start();
+                  }}
+                >
+                  Sign Up Free <ArrowUpRight className="w-4 h-4 ml-1" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full text-slate-700 font-semibold h-10 rounded-lg"
+                  onClick={() => {
+                    setMobileMenu(false);
+                    setAuthMode('login');
+                    setAuthError('');
+                    setModal('auth');
+                  }}
+                >
+                  Log In
+                </Button>
+              </div>
+            ) : (
+              <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-500 font-medium">Logged in as {currentUser.email?.split('@')[0]}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-red-600 font-bold"
+                  onClick={() => {
+                    setMobileMenu(false);
+                    handleSignOut();
+                  }}
+                >
+                  <LogOut className="w-3.5 h-3.5 mr-1" /> Log out
+                </Button>
+              </div>
+            )}
           </nav>
         )}
       </header>

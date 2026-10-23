@@ -1142,3 +1142,329 @@ h1 em,h2 em { font-family:Georgia,serif; font-weight:400; letter-spacing:0; }
 
 
 
+
+/* ==========================================================================
+   ENHANCED MOBILE-FIRST RESPONSIVE & NATIVE-APP UI/UX DESIGN SYSTEM
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Prevent horizontal scrollbars completely */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Safe container width with balanced touch gutters */
+  .container {
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Mobile Header Polish */
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  }
+  .header-inner {
+    height: 58px !important;
+    padding: 0 4px !important;
+  }
+  .brand strong {
+    font-size: 20px !important;
+  }
+  .brand span {
+    display: none !important;
+  }
+
+  /* Dropdown mobile menu animated & polished */
+  .mobile-menu {
+    border-radius: 0 0 16px 16px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-top: none !important;
+    background: #ffffff !important;
+    box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.15) !important;
+    padding: 12px 16px 16px !important;
+    gap: 6px !important;
+    z-index: 99 !important;
+  }
+  .mobile-menu button {
+    height: 44px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 0 14px !important;
+  }
+
+  /* Hero Section mobile perfection */
+  .hero {
+    min-height: auto !important;
+    padding: 24px 0 32px !important;
+    background-size: cover !important;
+  }
+  .hero-content {
+    padding: 0 !important;
+  }
+  .hero h1 {
+    font-size: 27px !important;
+    line-height: 1.22 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 12px !important;
+  }
+  .hero p {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    max-width: 100% !important;
+    margin-bottom: 18px !important;
+  }
+  .hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .hero-actions button,
+  .hero-primary,
+  .hero-text {
+    width: 100% !important;
+    height: 48px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+  }
+
+  /* Trust & stats bar */
+  .bg-emerald-700 {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+
+  /* Opportunities section */
+  .section-space {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+  }
+
+  /* App main container for logged in views */
+  .app-main {
+    padding-top: 14px !important;
+    padding-bottom: 88px !important; /* clear fixed bottom nav */
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  /* Mobile Survey Cards */
+  .app-survey-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .survey-card {
+    border-radius: 14px !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+    border: 1px solid #e2e8f0 !important;
+    overflow: hidden !important;
+  }
+  .survey-card-body {
+    padding: 14px 14px 16px !important;
+  }
+  .survey-card h3 {
+    font-size: 16px !important;
+    line-height: 1.35 !important;
+    min-height: auto !important;
+    margin-bottom: 8px !important;
+  }
+  .survey-card .card-action {
+    height: 44px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+  }
+
+  /* Category card grid */
+  .category-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Wallet mobile design */
+  .wallet-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .balance-panel {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+  .balance-number {
+    font-size: 34px !important;
+  }
+  .balance-bottom {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+  }
+  .balance-bottom button {
+    width: 100% !important;
+    height: 46px !important;
+  }
+  .wallet-aside {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Profile view mobile adjustments */
+  .profile-banner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+  .profile-banner .profile-avatar {
+    margin: 0 auto !important;
+  }
+  .profile-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .profile-stats > div {
+    padding: 12px 10px !important;
+  }
+
+  /* Fixed Mobile Bottom Navigation Bar (app-like) */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08) !important;
+    z-index: 80 !important;
+  }
+  .bottom-nav-item,
+  .bottom-nav button {
+    flex: 1 1 0 !important;
+    height: 56px !important;
+    padding: 6px 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    border: none !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease !important;
+  }
+  .bottom-nav-item svg,
+  .bottom-nav button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .bottom-nav-item.active,
+  .bottom-nav button.active {
+    color: #059669 !important;
+    font-weight: 700 !important;
+  }
+  .bottom-nav-dot {
+    width: 4px !important;
+    height: 4px !important;
+    border-radius: 50% !important;
+    background: #059669 !important;
+    margin-top: 1px !important;
+  }
+
+  /* Responsive Bottom Sheet / Centered Modal for Mobile */
+  .modal-backdrop {
+    padding: 0 !important;
+    align-items: flex-end !important; /* native mobile bottom-sheet feel */
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 150 !important;
+  }
+  .modal-panel {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 88vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25) !important;
+    animation: slideUpModal 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  @keyframes slideUpModal {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-header {
+    padding: 16px 20px 12px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    position: relative !important;
+  }
+  /* Little pill grab bar at top of mobile sheet */
+  .modal-header::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 6px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 36px !important;
+    height: 4px !important;
+    background: #cbd5e1 !important;
+    border-radius: 4px !important;
+  }
+  .modal-body {
+    padding: 16px 18px 24px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .modal-body h2 {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 8px !important;
+  }
+  .modal-primary,
+  .modal-secondary,
+  .modal-body .card-action {
+    height: 48px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+  }
+
+  /* Survey Question Modal Form UX */
+  .answer-list {
+    gap: 10px !important;
+  }
+  .answer {
+    min-height: 50px !important;
+    height: auto !important;
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Form inputs mobile typing friendliness */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"] {
+    font-size: 16px !important; /* prevents iOS auto-zoom on focus */
+    min-height: 46px !important;
+    border-radius: 10px !important;
+  }
+}
