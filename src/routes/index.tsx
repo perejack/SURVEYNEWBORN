@@ -70,7 +70,7 @@ export const Route = createFileRoute('/')({
 });
 
 type View = 'landing' | 'home' | 'surveys' | 'wallet' | 'profile';
-type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
+type Modal = 'activation' | 'survey' | 'unlock' | 'upgrade' | 'withdraw' | 'withdraw_upsell' | 'withdraw_cooldown' | 'locked' | 'run_out_free' | 'auth' | 'terms' | 'privacy' | 'disclaimer' | 'contact' | null;
 
 interface Question {
   question: string;
@@ -1176,6 +1176,9 @@ function Index() {
   const [authSubmitting, setAuthSubmitting] = useState(false);
   const [withdrawalDbId, setWithdrawalDbId] = useState<string | null>(null);
   const [stkStatusMsg, setStkStatusMsg] = useState('');
+  const [upgradeDate, setUpgradeDate] = useState<string | null>(() => {
+    try { return localStorage.getItem('sp_upgrade_date'); } catch { return null; }
+  });
 
   // Strategic Social Proof Toasts (only shown inside dashboard for authenticated users, never on public landing)
   useEffect(() => {
@@ -1509,6 +1512,23 @@ function Index() {
     navigate('home');
   };
 
+  // Helper: count business days elapsed since a given ISO date string
+  const businessDaysElapsed = (isoDate: string): number => {
+    const start = new Date(isoDate);
+    const now = new Date();
+    let count = 0;
+    const cursor = new Date(start);
+    cursor.setHours(0, 0, 0, 0);
+    const end = new Date(now);
+    end.setHours(0, 0, 0, 0);
+    while (cursor < end) {
+      cursor.setDate(cursor.getDate() + 1);
+      const day = cursor.getDay();
+      if (day !== 0 && day !== 6) count++; // skip Saturday(6) and Sunday(0)
+    }
+    return count;
+  };
+
   const handleWithdraw = async () => {
     setWithdrawError('');
     const amt = Number(withdrawAmount);
@@ -1521,6 +1541,16 @@ function Index() {
     if (amt > balance) {
       setWithdrawError('Your balance is below this requested amount.');
       return;
+    }
+
+    // Cooldown check: newly upgraded accounts must wait 5 business days
+    if (upgradeDate && plan && plan !== 'Free') {
+      const elapsed = businessDaysElapsed(upgradeDate);
+      if (elapsed < 5) {
+        closeModal();
+        setModal('withdraw_cooldown');
+        return;
+      }
     }
 
     // User rule: Free accounts cannot withdraw more than 3,000 a day.
@@ -1636,6 +1666,10 @@ function Index() {
     setStkStatusMsg('');
     setPlan(pkg.name);
     setUnlocked([1, 2, 3]);
+    // Record upgrade timestamp for the 5-business-day withdrawal cooldown
+    const now = new Date().toISOString();
+    setUpgradeDate(now);
+    try { localStorage.setItem('sp_upgrade_date', now); } catch {}
     if (currentUser) {
       await updateProfile(currentUser.id, { plan: pkg.name });
     }
@@ -3848,6 +3882,196 @@ function Index() {
                 </div>
               </div>
             )}
+
+            {/* --- WITHDRAWAL COOLDOWN MODAL (5 business days after upgrade) --- */}
+            {modal === 'withdraw_cooldown' && (() => {
+              const COOLDOWN_DAYS = 5;
+              const upgradedAt = upgradeDate ? new Date(upgradeDate) : new Date();
+
+              // Count business days elapsed
+              const elapsed = upgradeDate ? businessDaysElapsed(upgradeDate) : 0;
+              const remaining = Math.max(0, COOLDOWN_DAYS - elapsed);
+
+              // Compute exact unlock date (5 business days from upgrade)
+              const unlockDate = (() => {
+                const d = new Date(upgradedAt);
+                let added = 0;
+                while (added < COOLDOWN_DAYS) {
+                  d.setDate(d.getDate() + 1);
+                  const day = d.getDay();
+                  if (day !== 0 && day !== 6) added++;
+                }
+                return d;
+              })();
+
+              const unlockStr = unlockDate.toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' });
+              const msLeft = Math.max(0, unlockDate.getTime() - Date.now());
+              const hoursLeft = Math.floor(msLeft / 3_600_000);
+              const minutesLeft = Math.floor((msLeft % 3_600_000) / 60_000);
+
+              // Ring progress (SVG)
+              const pct = Math.min(1, elapsed / COOLDOWN_DAYS);
+              const radius = 52;
+              const circ = 2 * Math.PI * radius;
+              const dash = circ * pct;
+
+              return (
+                <div className="modal-body" style={{ padding: 0, overflow: 'hidden' }}>
+                  {/* Deep teal header */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #0f766e 0%, #0d9488 60%, #0891b2 100%)',
+                    padding: '32px 24px 24px',
+                    textAlign: 'center',
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}>
+                    <div style={{ position:'absolute',top:-40,right:-40,width:120,height:120,borderRadius:'50%',background:'rgba(255,255,255,0.07)' }} />
+                    <div style={{ position:'absolute',bottom:-30,left:-30,width:90,height:90,borderRadius:'50%',background:'rgba(255,255,255,0.05)' }} />
+
+                    {/* SVG ring countdown */}
+                    <div style={{ position:'relative', width: 130, height: 130, margin: '0 auto 12px' }}>
+                      <svg width="130" height="130" viewBox="0 0 130 130" style={{ transform:'rotate(-90deg)' }}>
+                        {/* Track */}
+                        <circle cx="65" cy="65" r={radius} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="10" />
+                        {/* Progress */}
+                        <circle
+                          cx="65" cy="65" r={radius}
+                          fill="none"
+                          stroke="#34d399"
+                          strokeWidth="10"
+                          strokeLinecap="round"
+                          strokeDasharray={`${dash} ${circ}`}
+                          style={{ transition: 'stroke-dasharray 1s ease' }}
+                        />
+                      </svg>
+                      {/* Center text */}
+                      <div style={{
+                        position:'absolute', inset:0, display:'flex', flexDirection:'column',
+                        alignItems:'center', justifyContent:'center',
+                      }}>
+                        <div style={{ color:'#fff', fontSize: 36, fontWeight: 900, lineHeight: 1 }}>{remaining}</div>
+                        <div style={{ color:'#99f6e4', fontSize: 11, fontWeight: 600, letterSpacing: 1 }}>
+                          {remaining === 1 ? 'DAY LEFT' : 'DAYS LEFT'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ color:'#ccfbf1', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform:'uppercase', marginBottom: 4 }}>
+                      Account Upgrade Verified ✓
+                    </div>
+                    <div style={{ color:'#fff', fontSize: 20, fontWeight: 800, marginBottom: 6 }}>
+                      Withdrawal Unlocks {remaining === 0 ? 'Today!' : `in ${remaining} Business ${remaining === 1 ? 'Day' : 'Days'}`}
+                    </div>
+                    <div style={{ color:'#99f6e4', fontSize: 13 }}>
+                      {hoursLeft > 0 ? `≈ ${hoursLeft}h ${minutesLeft}m remaining` : 'Almost there!'}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '20px 20px 0' }}>
+                    {/* Progress dots */}
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 10 }}>
+                        {Array.from({ length: COOLDOWN_DAYS }).map((_, i) => {
+                          const done = i < elapsed;
+                          const active = i === elapsed;
+                          return (
+                            <div key={i} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 4 }}>
+                              <div style={{
+                                width: 36, height: 36, borderRadius:'50%',
+                                background: done
+                                  ? 'linear-gradient(135deg,#10b981,#059669)'
+                                  : active
+                                    ? 'linear-gradient(135deg,#f59e0b,#d97706)'
+                                    : '#e5e7eb',
+                                display:'flex', alignItems:'center', justifyContent:'center',
+                                fontSize: 16,
+                                boxShadow: active ? '0 0 0 3px rgba(245,158,11,0.3)' : 'none',
+                                transition: 'all 0.3s ease',
+                              }}>
+                                {done ? '✓' : active ? '⏳' : ''}
+                              </div>
+                              <div style={{ fontSize: 9, color: done ? '#059669' : active ? '#d97706' : '#9ca3af', fontWeight: 600 }}>
+                                Day {i + 1}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* Connector line */}
+                      <div style={{ height: 3, background:'#e5e7eb', borderRadius: 99, marginTop: -28, zIndex:-1, position:'relative' }}>
+                        <div style={{
+                          height:'100%',
+                          width: `${(elapsed / COOLDOWN_DAYS) * 100}%`,
+                          background: 'linear-gradient(90deg,#10b981,#34d399)',
+                          borderRadius: 99,
+                          transition: 'width 0.8s ease',
+                        }} />
+                      </div>
+                    </div>
+
+                    {/* Info card */}
+                    <div style={{
+                      background:'linear-gradient(135deg,#f0fdf4,#ecfdf5)',
+                      border:'1.5px solid #6ee7b7',
+                      borderRadius: 12,
+                      padding:'14px 16px',
+                      marginBottom: 16,
+                    }}>
+                      <div style={{ fontWeight: 800, fontSize: 14, color:'#065f46', marginBottom: 6 }}>
+                        🔐 Why the wait?
+                      </div>
+                      <div style={{ fontSize: 12, color:'#047857', lineHeight: 1.6 }}>
+                        To protect your account from fraud, newly upgraded accounts have a <strong>5 business-day security hold</strong> before the first withdrawal is processed. This is a one-time wait.
+                      </div>
+                    </div>
+
+                    {/* Unlock date callout */}
+                    <div style={{
+                      background:'linear-gradient(135deg,#eff6ff,#dbeafe)',
+                      border:'1.5px solid #93c5fd',
+                      borderRadius: 12,
+                      padding:'12px 16px',
+                      display:'flex',
+                      alignItems:'center',
+                      gap: 12,
+                      marginBottom: 18,
+                    }}>
+                      <div style={{ fontSize: 28, flexShrink: 0 }}>📅</div>
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: 13, color:'#1e40af' }}>
+                          Your withdrawal unlocks on
+                        </div>
+                        <div style={{ fontWeight: 900, fontSize: 16, color:'#1d4ed8' }}>
+                          {unlockStr}
+                        </div>
+                        <div style={{ fontSize: 11, color:'#3b82f6', marginTop: 2 }}>
+                          KSh {balance.toLocaleString()} will be ready to withdraw
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Keep earning nudge */}
+                    <Button
+                      className="w-full font-bold"
+                      style={{
+                        background:'linear-gradient(135deg,#0d9488,#0f766e)',
+                        color:'#fff', borderRadius: 10, padding:'13px 0', fontSize: 14,
+                        display:'flex', alignItems:'center', justifyContent:'center', gap: 8,
+                        marginBottom: 10,
+                      }}
+                      onClick={() => { closeModal(); navigate('surveys'); }}
+                    >
+                      <Zap style={{ width:16, height:16, color:'#fde68a' }} />
+                      Keep Earning While You Wait
+                    </Button>
+
+                    <Button variant="ghost" className="modal-secondary" style={{ width:'100%', marginBottom: 16 }} onClick={closeModal}>
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* --- WITHDRAW UPGRADE UPSELL MODAL --- */}
             {modal === 'withdraw_upsell' && (() => {
